@@ -7,7 +7,7 @@ const person: Person = {
   name: "David Cárdenas",
   role: "Photographer",
   avatar: "/images/avatar.jpg", // puedes reemplazar con tu retrato más adelante
-  email: "contact@davidcardenasphoto.com",
+  email: "info@davkettz.com",
   location: "Pacific/Honolulu",
   languages: ["English", "Spanish"],
 };
@@ -27,19 +27,15 @@ const social: Social = [
   // Links are automatically displayed.
   // Import new icons in /once-ui/icons.ts
   {
-    name: "GitHub",
-    icon: "github",
-    link: "https://github.com/once-ui-system",
-  },
-  {
-    name: "LinkedIn",
-    icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
-  },
+  name: "Instagram",
+  icon: "instagram",
+  link: "https://instagram.com/davkettz",
+},
+
   {
     name: "Threads",
     icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    link: "https://www.threads.com/@davkett",
   },
   {
     name: "Email",
