@@ -129,7 +129,8 @@ export default async function Project({
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
           Related projects
         </Heading>
-        <Projects exclude={[post.slug]} range={[2]} />
+   <Projects exclude={[post.slug]} range={[2]} compact={true} />
+
       </Column>
       <ScrollToHash />
     </Column>

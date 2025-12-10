@@ -20,7 +20,7 @@ interface ProjectCardProps {
   description: string;
   avatars: { src: string }[];
   link: string;
-  compact?: boolean; // 🔥 NEW
+  compact?: boolean;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -33,104 +33,117 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   link,
   compact = false,
 }) => {
+
+  ///////////////////////////////////////////////////////////////////////////
+  // 🔹 COMPACT MODE (for related projects)
+  ///////////////////////////////////////////////////////////////////////////
+  if (compact) {
+    return (
+      <SmartLink
+        href={href}
+        style={{
+          display: "block",
+          textDecoration: "none",
+          color: "inherit",
+        }}
+      >
+        <Column fillWidth gap="8" style={{ maxWidth: "260px", cursor: "pointer" }}>
+          <Carousel
+            sizes="(max-width: 300px) 100vw, 300px"
+            items={images.map((image) => ({
+              slide: image,
+              alt: title,
+            }))}
+            style={{
+              borderRadius: "16px",
+              overflow: "hidden",
+              boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+            }}
+          />
+
+          <Heading
+            as="h3"
+            wrap="balance"
+            variant="body-strong-m"
+            style={{
+              lineHeight: "1.25",
+              textAlign: "center",
+              marginTop: "8px",
+            }}
+          >
+            {title}
+          </Heading>
+        </Column>
+      </SmartLink>
+    );
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  // 🔹 FULL MODE (used in homepage + Work page)
+  ///////////////////////////////////////////////////////////////////////////
+
   return (
-    <Column
-      fillWidth
-      gap={compact ? "s" : "m"}
-      style={{
-        maxWidth: compact ? "260px" : "100%",
-
-        /* 🔥🔥🔥 Apple TV Hover Effect — only active in compact mode */
-        transition: compact ? "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s" : "",
-        transformStyle: "preserve-3d",
-        cursor: compact ? "pointer" : "default",
-      }}
-      className={compact ? "apple-card" : ""}
-    >
-      <style>{`
-        /* Only for compact mode */
-        .apple-card:hover {
-          transform: translateY(-6px) scale(1.06) rotateX(1deg) rotateY(1deg);
-          box-shadow:
-            0 20px 40px rgba(0,0,0,0.18),
-            0 0 20px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 768px) {
-          .apple-card:hover {
-            transform: none !important;
-            box-shadow: none !important;
-          }
-        }
-      `}</style>
-
+    <Column fillWidth gap="m">
       <Carousel
-        sizes={compact ? "(max-width: 300px) 100vw, 300px" : "(max-width: 960px) 100vw, 960px"}
+        sizes="(max-width: 960px) 100vw, 960px"
         items={images.map((image) => ({
           slide: image,
           alt: title,
         }))}
         style={{
-          borderRadius: compact ? "14px" : "16px",
+          borderRadius: "16px",
           overflow: "hidden",
-          boxShadow: compact
-            ? "0 4px 12px rgba(0,0,0,0.10)"
-            : "0 10px 32px rgba(0,0,0,0.08)",
-          transition: "box-shadow 0.3s",
+          boxShadow: "0 10px 32px rgba(0,0,0,0.08)",
         }}
       />
 
       <Flex
         s={{ direction: "column" }}
         fillWidth
-        paddingX={compact ? "0" : "s"}
-        paddingTop={compact ? "8" : "12"}
-        paddingBottom={compact ? "8" : "24"}
-        gap={compact ? "8" : "l"}
+        paddingX="s"
+        paddingTop="12"
+        paddingBottom="24"
+        gap="l"
       >
         {title && (
           <Flex flex={5}>
-            <Heading
-              as="h2"
-              wrap="balance"
-              variant={compact ? "body-strong-m" : "heading-strong-xl"}
-            >
+            <Heading as="h2" wrap="balance" variant="heading-strong-xl">
               {title}
             </Heading>
           </Flex>
         )}
 
         {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
-          <Column flex={7} gap={compact ? "8" : "16"}>
-            {!compact && avatars?.length > 0 && (
-              <AvatarGroup avatars={avatars} size="m" reverse />
-            )}
+          <Column flex={7} gap="16">
+            {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="m" reverse />}
 
             {description?.trim() && (
-              <Text
-                wrap="balance"
-                variant={compact ? "body-default-xs" : "body-default-s"}
-                onBackground="neutral-weak"
-              >
+              <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
                 {description}
               </Text>
             )}
 
-            {!compact && (
-              <Flex gap="16" wrap>
-                {content?.trim() && (
-                  <SmartLink suffixIcon="arrowRight" href={href}>
-                    <Text variant="body-default-s">Explore story</Text>
-                  </SmartLink>
-                )}
+            <Flex gap="24" wrap>
+              {content?.trim() && (
+                <SmartLink
+                  suffixIcon="arrowRight"
+                  style={{ margin: 0, width: "fit-content" }}
+                  href={href}
+                >
+                  <Text variant="body-default-s">Explore story</Text>
+                </SmartLink>
+              )}
 
-                {link && (
-                  <SmartLink suffixIcon="arrowUpRightFromSquare" href={link}>
-                    <Text variant="body-default-s">View project</Text>
-                  </SmartLink>
-                )}
-              </Flex>
-            )}
+              {link && (
+                <SmartLink
+                  suffixIcon="arrowUpRightFromSquare"
+                  style={{ margin: 0, width: "fit-content" }}
+                  href={link}
+                >
+                  <Text variant="body-default-s">View project</Text>
+                </SmartLink>
+              )}
+            </Flex>
           </Column>
         )}
       </Flex>
