@@ -14,7 +14,6 @@ import {
 
 import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
-import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 
 export async function generateMetadata() {
@@ -69,14 +68,14 @@ export default function Home() {
             </RevealFx>
           )}
 
-          {/* NEW HEADLINE */}
+          {/* HEADLINE */}
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
               Visual stories shaped by simplicity and intention.
             </Heading>
           </RevealFx>
 
-          {/* NEW SUBLINE */}
+          {/* SUBLINE */}
           <RevealFx
             translateY="8"
             delay={0.2}
@@ -91,7 +90,7 @@ export default function Home() {
             </Text>
           </RevealFx>
 
-          {/* ORIGINAL CTA BUTTON — unchanged */}
+          {/* CTA */}
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
             <Button
               id="about"
@@ -118,12 +117,7 @@ export default function Home() {
         </Column>
       </Column>
 
-      {/* FEATURED PROJECT */}
-      <RevealFx translateY="16" delay={0.6}>
-        <Projects range={[1, 1]} />
-      </RevealFx>
-
-      {/* BLOG SECTION */}
+      {/* BLOG SECTION (se queda) */}
       {routes["/blog"] && (
         <Column fillWidth gap="24" marginBottom="l">
           <Row fillWidth paddingRight="64">
@@ -147,9 +141,6 @@ export default function Home() {
           </Row>
         </Column>
       )}
-
-      {/* MORE PROJECTS */}
-      <Projects range={[2]} />
 
       {/* FOOTER */}
       <Mailchimp />
