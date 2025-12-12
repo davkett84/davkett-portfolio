@@ -6,19 +6,24 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
+// 👉 Asignación LOCAL por índice (NO toca content.tsx)
+const portraitIndexes = [0, 1, 2, 3];
+const corporateIndexes = [4, 5, 6, 7];
+
 export default function GalleryView() {
   const [activeCategory, setActiveCategory] =
     useState<Category>("portraits");
 
-  const filteredImages = gallery.images.filter((image: any) => {
-    // Si no tiene category, no filtramos (compatibilidad total)
-    if (!image.category) return true;
-    return image.category === activeCategory;
+  const filteredImages = gallery.images.filter((_, index) => {
+    if (activeCategory === "portraits") {
+      return portraitIndexes.includes(index);
+    }
+    return corporateIndexes.includes(index);
   });
 
   return (
     <Flex>
-      {/* LEFT FILTER — sin props raras */}
+      {/* FILTER */}
       <div style={{ minWidth: 160, marginRight: 32 }}>
         <Text
           onClick={() => setActiveCategory("portraits")}
@@ -44,9 +49,9 @@ export default function GalleryView() {
         </Text>
       </div>
 
-      {/* GALLERY — CÓDIGO ORIGINAL, SIN TOCAR */}
+      {/* GALLERY — CÓDIGO ORIGINAL */}
       <MasonryGrid columns={2} s={{ columns: 1 }}>
-        {filteredImages.map((image: any, index: number) => (
+        {filteredImages.map((image, index) => (
           <Media
             key={index}
             enlarge
