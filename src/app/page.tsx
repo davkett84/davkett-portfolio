@@ -90,7 +90,7 @@ export default function Home() {
             </Text>
           </RevealFx>
 
-          {/* CTA — UPDATED */}
+          {/* CTA — MISMO DISEÑO, NUEVO COPY */}
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
             <Button
               href={work.path}
@@ -100,6 +100,12 @@ export default function Home() {
               arrowIcon
             >
               <Row gap="8" vertical="center" paddingRight="4">
+                <Avatar
+                  marginRight="8"
+                  style={{ marginLeft: "-0.75rem" }}
+                  src={person.avatar}
+                  size="m"
+                />
                 View Selected Work
               </Row>
             </Button>
