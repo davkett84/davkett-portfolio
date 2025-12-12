@@ -6,32 +6,27 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
-// 🔒 Type guard local (NO toca types globales)
-function hasCategory(
-  image: { src: string; alt: string; orientation: string }
-): image is { src: string; alt: string; orientation: string; category?: Category } {
-  return "category" in image;
-}
-
 export default function GalleryView() {
   const [activeCategory, setActiveCategory] =
     useState<Category>("portraits");
 
-  const filteredImages = gallery.images.filter((image) => {
-    if (!hasCategory(image)) return true; // fallback seguro
+  const filteredImages = gallery.images.filter((image: any) => {
+    // Si no tiene category, no filtramos (compatibilidad total)
+    if (!image.category) return true;
     return image.category === activeCategory;
   });
 
   return (
-    <Flex gap="xl" alignItems="flex-start">
-      {/* FILTER */}
-      <Flex direction="column" gap="s" style={{ minWidth: 160 }}>
+    <Flex>
+      {/* LEFT FILTER — sin props raras */}
+      <div style={{ minWidth: 160, marginRight: 32 }}>
         <Text
           onClick={() => setActiveCategory("portraits")}
           style={{
             cursor: "pointer",
             fontWeight: activeCategory === "portraits" ? 600 : 400,
             opacity: activeCategory === "portraits" ? 1 : 0.5,
+            marginBottom: 12,
           }}
         >
           Portraits
@@ -47,11 +42,11 @@ export default function GalleryView() {
         >
           Corporate
         </Text>
-      </Flex>
+      </div>
 
-      {/* GALLERY (MISMO CÓDIGO ORIGINAL) */}
+      {/* GALLERY — CÓDIGO ORIGINAL, SIN TOCAR */}
       <MasonryGrid columns={2} s={{ columns: 1 }}>
-        {filteredImages.map((image, index) => (
+        {filteredImages.map((image: any, index: number) => (
           <Media
             key={index}
             enlarge
