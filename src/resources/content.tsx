@@ -165,56 +165,62 @@ const work: Work = {
   description: `Selected photography projects and visual stories by ${person.name}.`,
 };
 
-
 const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
+  description: `A curated selection of portraits and corporate work by ${person.name}`,
   images: [
     {
       src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
+      alt: "Portrait",
       orientation: "horizontal",
+      category: "portraits",
     },
     {
       src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
+      alt: "Portrait",
       orientation: "vertical",
+      category: "portraits",
     },
     {
       src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
+      alt: "Portrait",
       orientation: "horizontal",
+      category: "portraits",
     },
     {
       src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
+      alt: "Portrait",
       orientation: "vertical",
+      category: "portraits",
     },
     {
       src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
+      alt: "Corporate Event",
       orientation: "vertical",
+      category: "corporate",
     },
     {
       src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
+      alt: "Corporate Event",
       orientation: "horizontal",
+      category: "corporate",
     },
     {
       src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
+      alt: "Corporate Event",
       orientation: "horizontal",
+      category: "corporate",
     },
     {
       src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
+      alt: "Corporate Event",
       orientation: "vertical",
+      category: "corporate",
     },
   ],
 };
+
 
 export { person, social, newsletter, home, about, blog, work, gallery };
