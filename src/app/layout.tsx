@@ -26,7 +26,7 @@ export async function generateMetadata() {
   });
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -81,7 +81,7 @@ export default async function RootLayout({
 
                   const savedTheme = localStorage.getItem('data-theme');
                   root.setAttribute('data-theme', resolveTheme(savedTheme));
-                } catch (e) {
+                } catch {
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }
               })();
@@ -122,7 +122,7 @@ export default async function RootLayout({
               }}
               gradient={{
                 display: true,
-                opacity: 0.6, // ✅ SOLUCIÓN DEFINITIVA
+                opacity: 0.6,
                 x: "50%",
                 y: "0%",
                 width: "160%",
@@ -133,20 +133,20 @@ export default async function RootLayout({
               }}
               dots={{
                 display: effects.dots.display,
-                opacity: effects.dots.opacity as number,
+                opacity: Number(effects.dots.opacity),
                 size: effects.dots.size as SpacingToken,
                 color: effects.dots.color,
               }}
               grid={{
                 display: effects.grid.display,
-                opacity: effects.grid.opacity as number,
+                opacity: Number(effects.grid.opacity),
                 color: effects.grid.color,
                 width: effects.grid.width,
                 height: effects.grid.height,
               }}
               lines={{
                 display: effects.lines.display,
-                opacity: effects.lines.opacity as number,
+                opacity: Number(effects.lines.opacity),
                 size: effects.lines.size as SpacingToken,
                 thickness: effects.lines.thickness,
                 angle: effects.lines.angle,
