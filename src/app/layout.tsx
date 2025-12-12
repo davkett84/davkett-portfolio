@@ -9,7 +9,6 @@ import {
   Column,
   Flex,
   Meta,
-  opacity,
   RevealFx,
   SpacingToken,
 } from "@once-ui-system/core";
@@ -29,9 +28,9 @@ export async function generateMetadata() {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <Flex
       suppressHydrationWarning
@@ -46,7 +45,6 @@ export default async function RootLayout({
       )}
     >
       <head>
-        {/* Theme init */}
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -82,11 +80,8 @@ export default async function RootLayout({
                   };
 
                   const savedTheme = localStorage.getItem('data-theme');
-                  const resolvedTheme = resolveTheme(savedTheme);
-                  root.setAttribute('data-theme', resolvedTheme);
-                  
+                  root.setAttribute('data-theme', resolveTheme(savedTheme));
                 } catch (e) {
-                  console.error('Failed to initialize theme:', e);
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }
               })();
@@ -94,13 +89,12 @@ export default async function RootLayout({
           }}
         />
 
-        {/* 🎨 Apple Vision Pro Gradient Variables */}
         <style>{`
           html[data-theme="light"] {
             --gradient-start: rgba(120, 200, 255, 0.18);
             --gradient-end: rgba(255, 255, 255, 0);
           }
-          
+
           html[data-theme="dark"] {
             --gradient-start: rgba(40, 80, 140, 0.32);
             --gradient-end: rgba(0, 0, 0, 0);
@@ -119,7 +113,6 @@ export default async function RootLayout({
           horizontal="center"
         >
           <RevealFx fill position="absolute">
-            {/* 🌫️ Apple Vision Pro Gradient */}
             <Background
               mask={{
                 x: effects.mask.x,
@@ -129,7 +122,7 @@ export default async function RootLayout({
               }}
               gradient={{
                 display: true,
-                opacity: opacity.m, // ✅ FIX AQUÍ
+                opacity: 0.6, // ✅ SOLUCIÓN DEFINITIVA
                 x: "50%",
                 y: "0%",
                 width: "160%",
@@ -140,20 +133,20 @@ export default async function RootLayout({
               }}
               dots={{
                 display: effects.dots.display,
-                opacity: effects.dots.opacity as opacity,
+                opacity: effects.dots.opacity as number,
                 size: effects.dots.size as SpacingToken,
                 color: effects.dots.color,
               }}
               grid={{
                 display: effects.grid.display,
-                opacity: effects.grid.opacity as opacity,
+                opacity: effects.grid.opacity as number,
                 color: effects.grid.color,
                 width: effects.grid.width,
                 height: effects.grid.height,
               }}
               lines={{
                 display: effects.lines.display,
-                opacity: effects.lines.opacity as opacity,
+                opacity: effects.lines.opacity as number,
                 size: effects.lines.size as SpacingToken,
                 thickness: effects.lines.thickness,
                 angle: effects.lines.angle,
