@@ -6,7 +6,7 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
-// 👉 Asignación LOCAL por índice (NO toca content.tsx)
+// Asignación local por índice (como ya funciona)
 const portraitIndexes = [0, 1, 2, 3];
 const corporateIndexes = [4, 5, 6, 7];
 
@@ -23,33 +23,77 @@ export default function GalleryView() {
 
   return (
     <Flex>
-      {/* FILTER */}
-      <div style={{ minWidth: 160, marginRight: 32 }}>
-        <Text
+      {/* LEFT FILTER — editorial */}
+      <div
+        style={{
+          minWidth: 180,
+          marginRight: 56,
+          marginTop: 12,
+        }}
+      >
+        {/* PORTRAITS */}
+        <div
           onClick={() => setActiveCategory("portraits")}
           style={{
             cursor: "pointer",
-            fontWeight: activeCategory === "portraits" ? 600 : 400,
-            opacity: activeCategory === "portraits" ? 1 : 0.5,
-            marginBottom: 12,
+            marginBottom: 16,
           }}
         >
-          Portraits
-        </Text>
+          <Text
+            style={{
+              fontWeight: activeCategory === "portraits" ? 600 : 400,
+              opacity: activeCategory === "portraits" ? 1 : 0.45,
+              letterSpacing: "0.04em",
+            }}
+          >
+            Portraits
+          </Text>
 
-        <Text
+          {activeCategory === "portraits" && (
+            <div
+              style={{
+                height: 1,
+                width: 28,
+                background: "currentColor",
+                marginTop: 6,
+                opacity: 0.6,
+              }}
+            />
+          )}
+        </div>
+
+        {/* CORPORATE */}
+        <div
           onClick={() => setActiveCategory("corporate")}
           style={{
             cursor: "pointer",
-            fontWeight: activeCategory === "corporate" ? 600 : 400,
-            opacity: activeCategory === "corporate" ? 1 : 0.5,
           }}
         >
-          Corporate
-        </Text>
+          <Text
+            style={{
+              fontWeight: activeCategory === "corporate" ? 600 : 400,
+              opacity: activeCategory === "corporate" ? 1 : 0.45,
+              letterSpacing: "0.04em",
+            }}
+          >
+            Corporate
+          </Text>
+
+          {activeCategory === "corporate" && (
+            <div
+              style={{
+                height: 1,
+                width: 28,
+                background: "currentColor",
+                marginTop: 6,
+                opacity: 0.6,
+              }}
+            />
+          )}
+        </div>
       </div>
 
-      {/* GALLERY — CÓDIGO ORIGINAL */}
+      {/* GALLERY — NO TOCAR */}
       <MasonryGrid columns={2} s={{ columns: 1 }}>
         {filteredImages.map((image, index) => (
           <Media
