@@ -6,7 +6,6 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
-// Asignación local por índice (estable)
 const portraitIndexes = [0, 1, 2, 3];
 const corporateIndexes = [4, 5, 6, 7];
 
@@ -23,12 +22,14 @@ export default function GalleryView() {
 
   return (
     <>
-      {/* 🔹 LOCAL RESPONSIVE STYLES */}
       <style>{`
+        /* WRAPPER */
         .gallery-wrapper {
           display: flex;
+          width: 100%;
         }
 
+        /* FILTER (desktop) */
         .gallery-filter {
           min-width: 180px;
           margin-right: 56px;
@@ -40,6 +41,7 @@ export default function GalleryView() {
           .gallery-wrapper {
             flex-direction: column;
             align-items: center;
+            width: 100%;
           }
 
           .gallery-filter {
@@ -49,8 +51,10 @@ export default function GalleryView() {
             min-width: auto;
           }
 
-          .gallery-filter-item {
-            text-align: center;
+          /* 🔑 CLAVE: la galería ocupa todo */
+          .gallery-grid {
+            width: 100%;
+            max-width: 100%;
           }
         }
       `}</style>
@@ -60,9 +64,8 @@ export default function GalleryView() {
         <div className="gallery-filter">
           {/* PORTRAITS */}
           <div
-            className="gallery-filter-item"
             onClick={() => setActiveCategory("portraits")}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", textAlign: "center" }}
           >
             <Text
               style={{
@@ -89,9 +92,8 @@ export default function GalleryView() {
 
           {/* CORPORATE */}
           <div
-            className="gallery-filter-item"
             onClick={() => setActiveCategory("corporate")}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", textAlign: "center" }}
           >
             <Text
               style={{
@@ -117,23 +119,25 @@ export default function GalleryView() {
           </div>
         </div>
 
-        {/* GALLERY — NO TOCAR */}
-        <MasonryGrid columns={2} s={{ columns: 1 }}>
-          {filteredImages.map((image, index) => (
-            <Media
-              key={index}
-              enlarge
-              priority={index < 10}
-              sizes="(max-width: 560px) 100vw, 50vw"
-              radius="m"
-              aspectRatio={
-                image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
-              }
-              src={image.src}
-              alt={image.alt}
-            />
-          ))}
-        </MasonryGrid>
+        {/* GALLERY */}
+        <div className="gallery-grid">
+          <MasonryGrid columns={2} s={{ columns: 1 }}>
+            {filteredImages.map((image, index) => (
+              <Media
+                key={index}
+                enlarge
+                priority={index < 10}
+                sizes="(max-width: 560px) 100vw, 50vw"
+                radius="m"
+                aspectRatio={
+                  image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
+                }
+                src={image.src}
+                alt={image.alt}
+              />
+            ))}
+          </MasonryGrid>
+        </div>
       </div>
     </>
   );
