@@ -122,7 +122,7 @@ export default function RootLayout({
               }}
               gradient={{
                 display: true,
-                x: 50,       // ✅ NUMÉRICO
+                x: 50,
                 y: 0,
                 width: 160,
                 height: 160,
@@ -132,20 +132,17 @@ export default function RootLayout({
               }}
               dots={{
                 display: effects.dots.display,
-                opacity: Number(effects.dots.opacity),
                 size: effects.dots.size as SpacingToken,
                 color: effects.dots.color,
               }}
               grid={{
                 display: effects.grid.display,
-                opacity: Number(effects.grid.opacity),
                 color: effects.grid.color,
                 width: effects.grid.width,
                 height: effects.grid.height,
               }}
               lines={{
                 display: effects.lines.display,
-                opacity: Number(effects.lines.opacity),
                 size: effects.lines.size as SpacingToken,
                 thickness: effects.lines.thickness,
                 angle: effects.lines.angle,
