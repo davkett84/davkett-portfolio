@@ -129,7 +129,7 @@ export default async function RootLayout({
               }}
               gradient={{
                 display: true,
-                opacity: "m",
+                opacity: opacity.m, // ✅ FIX AQUÍ
                 x: "50%",
                 y: "0%",
                 width: "160%",
