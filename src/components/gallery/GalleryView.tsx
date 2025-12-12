@@ -6,22 +6,26 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
+// 🔒 Type guard local (NO toca types globales)
+function hasCategory(
+  image: { src: string; alt: string; orientation: string }
+): image is { src: string; alt: string; orientation: string; category?: Category } {
+  return "category" in image;
+}
+
 export default function GalleryView() {
   const [activeCategory, setActiveCategory] =
     useState<Category>("portraits");
 
-  const filteredImages = gallery.images.filter(
-    (image) => image.category === activeCategory
-  );
+  const filteredImages = gallery.images.filter((image) => {
+    if (!hasCategory(image)) return true; // fallback seguro
+    return image.category === activeCategory;
+  });
 
   return (
     <Flex gap="xl" alignItems="flex-start">
-      {/* LEFT FILTER */}
-      <Flex
-        direction="column"
-        gap="s"
-        style={{ minWidth: "160px" }}
-      >
+      {/* FILTER */}
+      <Flex direction="column" gap="s" style={{ minWidth: 160 }}>
         <Text
           onClick={() => setActiveCategory("portraits")}
           style={{
@@ -45,25 +49,23 @@ export default function GalleryView() {
         </Text>
       </Flex>
 
-      {/* GALLERY */}
-      <Flex style={{ flex: 1 }}>
-        <MasonryGrid columns={2} s={{ columns: 1 }}>
-          {filteredImages.map((image, index) => (
-            <Media
-              key={index}
-              enlarge
-              priority={index < 6}
-              sizes="(max-width: 560px) 100vw, 50vw"
-              radius="m"
-              aspectRatio={
-                image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
-              }
-              src={image.src}
-              alt={image.alt}
-            />
-          ))}
-        </MasonryGrid>
-      </Flex>
+      {/* GALLERY (MISMO CÓDIGO ORIGINAL) */}
+      <MasonryGrid columns={2} s={{ columns: 1 }}>
+        {filteredImages.map((image, index) => (
+          <Media
+            key={index}
+            enlarge
+            priority={index < 10}
+            sizes="(max-width: 560px) 100vw, 50vw"
+            radius="m"
+            aspectRatio={
+              image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
+            }
+            src={image.src}
+            alt={image.alt}
+          />
+        ))}
+      </MasonryGrid>
     </Flex>
   );
 }
