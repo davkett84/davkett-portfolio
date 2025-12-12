@@ -122,30 +122,30 @@ export default function RootLayout({
               }}
               gradient={{
                 display: true,
-                x: "50%",
-                y: "0%",
-                width: "160%",
-                height: "160%",
-                tilt: "0deg",
+                x: 50,       // ✅ NUMÉRICO
+                y: 0,
+                width: 160,
+                height: 160,
+                tilt: 0,
                 colorStart: "var(--gradient-start)",
                 colorEnd: "var(--gradient-end)",
               }}
               dots={{
                 display: effects.dots.display,
-                opacity: effects.dots.opacity as number,
+                opacity: Number(effects.dots.opacity),
                 size: effects.dots.size as SpacingToken,
                 color: effects.dots.color,
               }}
               grid={{
                 display: effects.grid.display,
-                opacity: effects.grid.opacity as number,
+                opacity: Number(effects.grid.opacity),
                 color: effects.grid.color,
                 width: effects.grid.width,
                 height: effects.grid.height,
               }}
               lines={{
                 display: effects.lines.display,
-                opacity: effects.lines.opacity as number,
+                opacity: Number(effects.lines.opacity),
                 size: effects.lines.size as SpacingToken,
                 thickness: effects.lines.thickness,
                 angle: effects.lines.angle,
