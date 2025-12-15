@@ -6,8 +6,8 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "corporate";
 
-const portraitIndexes = [0, 1, 2, 3];
-const corporateIndexes = [4, 5, 6, 7];
+// 🔒 CORTE EXACTO
+const PORTRAITS_COUNT = 5;
 
 export default function GalleryView() {
   const [activeCategory, setActiveCategory] =
@@ -15,57 +15,36 @@ export default function GalleryView() {
 
   const filteredImages = gallery.images.filter((_, index) => {
     if (activeCategory === "portraits") {
-      return portraitIndexes.includes(index);
+      return index < PORTRAITS_COUNT;
     }
-    return corporateIndexes.includes(index);
+    return index >= PORTRAITS_COUNT;
   });
 
   return (
     <>
       <style>{`
-        /* WRAPPER */
-        .gallery-wrapper {
-          display: flex;
-          width: 100%;
-        }
+        .gallery-wrapper { display: flex; width: 100%; }
+        .gallery-filter { min-width: 180px; margin-right: 56px; margin-top: 12px; }
 
-        /* FILTER (desktop) */
-        .gallery-filter {
-          min-width: 180px;
-          margin-right: 56px;
-          margin-top: 12px;
-        }
-
-        /* 📱 MOBILE */
         @media (max-width: 768px) {
-          .gallery-wrapper {
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-          }
-
+          .gallery-wrapper { flex-direction: column; align-items: center; }
           .gallery-filter {
             display: flex;
             gap: 32px;
             margin: 0 0 24px 0;
             min-width: auto;
           }
-
-          /* 🔑 CLAVE: la galería ocupa todo */
-          .gallery-grid {
-            width: 100%;
-            max-width: 100%;
-          }
+          .gallery-filter-item { text-align: center; }
         }
       `}</style>
 
       <div className="gallery-wrapper">
-        {/* FILTER */}
         <div className="gallery-filter">
           {/* PORTRAITS */}
           <div
+            className="gallery-filter-item"
             onClick={() => setActiveCategory("portraits")}
-            style={{ cursor: "pointer", textAlign: "center" }}
+            style={{ cursor: "pointer", marginBottom: 16 }}
           >
             <Text
               style={{
@@ -76,7 +55,6 @@ export default function GalleryView() {
             >
               Portraits
             </Text>
-
             {activeCategory === "portraits" && (
               <div
                 style={{
@@ -92,8 +70,9 @@ export default function GalleryView() {
 
           {/* CORPORATE */}
           <div
+            className="gallery-filter-item"
             onClick={() => setActiveCategory("corporate")}
-            style={{ cursor: "pointer", textAlign: "center" }}
+            style={{ cursor: "pointer" }}
           >
             <Text
               style={{
@@ -104,7 +83,6 @@ export default function GalleryView() {
             >
               Corporate
             </Text>
-
             {activeCategory === "corporate" && (
               <div
                 style={{
@@ -119,25 +97,22 @@ export default function GalleryView() {
           </div>
         </div>
 
-        {/* GALLERY */}
-        <div className="gallery-grid">
-          <MasonryGrid columns={2} s={{ columns: 1 }}>
-            {filteredImages.map((image, index) => (
-              <Media
-                key={index}
-                enlarge
-                priority={index < 10}
-                sizes="(max-width: 560px) 100vw, 50vw"
-                radius="m"
-                aspectRatio={
-                  image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
-                }
-                src={image.src}
-                alt={image.alt}
-              />
-            ))}
-          </MasonryGrid>
-        </div>
+        <MasonryGrid columns={2} s={{ columns: 1 }}>
+          {filteredImages.map((image, index) => (
+            <Media
+              key={index}
+              enlarge
+              priority={index < 10}
+              sizes="(max-width: 560px) 100vw, 50vw"
+              radius="m"
+              aspectRatio={
+                image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
+              }
+              src={image.src}
+              alt={image.alt}
+            />
+          ))}
+        </MasonryGrid>
       </div>
     </>
   );
