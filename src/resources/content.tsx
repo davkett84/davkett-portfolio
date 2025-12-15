@@ -110,16 +110,42 @@ const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
+  description: `A curated photo collection by ${person.name}`,
   images: [
-    { src: "/images/gallery/horizontal-1.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/vertical-4.jpg", alt: "image", orientation: "vertical" },
-    { src: "/images/gallery/horizontal-3.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/vertical-1.jpg", alt: "image", orientation: "vertical" },
-    { src: "/images/gallery/vertical-2.jpg", alt: "image", orientation: "vertical" },
-    { src: "/images/gallery/horizontal-2.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-4.jpg", alt: "image", orientation: "horizontal" },
-    { src: "/images/gallery/vertical-3.jpg", alt: "image", orientation: "vertical" },
+    // 🔹 BLOQUE 1 — Impacto inicial (Hero sequence)
+
+    {
+      src: "/images/gallery/Portrait 01.jpg",
+      alt: "Editorial solo portrait with strong gaze and natural light",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Portrait 02.jpg",
+      alt: "Family lifestyle photography walking together naturally",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Portrait 03.jpg",
+      alt: "Intimate engagement portrait with emotional closeness",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Portrait 04.jpg",
+      alt: "Lifestyle solo portrait with architectural environment",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Portrait 05.jpg",
+      alt: "Editorial wedding portrait with calm and subtle mood",
+      orientation: "vertical",
+    },
+
+    // 🔹 BLOQUE 2 — (aquí irán los siguientes Portraits)
+    // Portrait 06.jpg …
+    // Portrait 07.jpg …
+
+    // 🔹 BLOQUE 3 — Corporate (más adelante)
+    // Corporate 01.jpg …
   ],
 };
 
