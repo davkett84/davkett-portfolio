@@ -51,11 +51,11 @@ function HomeGallery() {
           box-sizing: border-box;
         }
 
-        /* ✅ MÁS GRANDE: 2 columnas en desktop (tiles más grandes) */
+        /* ✅ 3 columnas en desktop */
         .homeGalleryGrid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 28px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 24px;
           width: 100%;
         }
 
@@ -83,11 +83,12 @@ function HomeGallery() {
           overflow: hidden;
           cursor: pointer;
           transform: translateZ(0);
-          transition: box-shadow 240ms ease;
+          transition: box-shadow 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .homeTile :global(img) {
-          transition: transform 240ms ease, filter 240ms ease;
+          transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                      filter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
           will-change: transform, filter;
         }
 
@@ -97,7 +98,16 @@ function HomeGallery() {
 
         .homeTile:hover :global(img) {
           transform: scale(1.03);
-          filter: saturate(1.05) contrast(1.02) brightness(1.02);
+          filter: saturate(1.05) contrast(1.02) brightness(1.02) blur(0.2px);
+        }
+
+        /* Link que cubre toda la tarjeta sin estilos raros */
+        .homeTileLink {
+          display: block;
+          width: 100%;
+          height: 100%;
+          text-decoration: none;
+          color: inherit;
         }
       `}</style>
 
@@ -105,16 +115,24 @@ function HomeGallery() {
         <div className="homeGalleryGrid">
           {homeGalleryImages.map((image, index) => (
             <div key={image.src} className="homeTile">
-              <Media
-                enlarge
-                priority={index < 9}
-                sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 50vw"
-                radius="m"
-                /* Ratio constante para look editorial consistente */
-                aspectRatio="4 / 3"
-                src={image.src}
-                alt={image.alt}
-              />
+              {/* ✅ FIX: abrir la imagen completa (no zoom del thumbnail) */}
+              <a
+                className="homeTileLink"
+                href={image.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open full image ${index + 1}`}
+              >
+                <Media
+                  /* 🔥 Quitamos enlarge porque causaba “zoom del thumbnail” */
+                  priority={index < 9}
+                  sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
+                  radius="m"
+                  aspectRatio="4 / 3"
+                  src={image.src}
+                  alt={image.alt}
+                />
+              </a>
             </div>
           ))}
         </div>
@@ -142,7 +160,7 @@ export default function Home() {
           }}
         />
 
-        {/* HERO */}
+        {/* HERO (minimal) */}
         <Column fillWidth horizontal="center" gap="m">
           <Column maxWidth="s" horizontal="center" align="center">
             {home.featured.display && (
@@ -150,7 +168,7 @@ export default function Home() {
                 fillWidth
                 horizontal="center"
                 paddingTop="16"
-                paddingBottom="32"
+                paddingBottom="24"
                 paddingLeft="12"
               >
                 <Badge
@@ -167,30 +185,22 @@ export default function Home() {
               </RevealFx>
             )}
 
-            {/* HEADLINE */}
-            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
+            {/* ✅ Headline corto */}
+            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="10">
               <Heading wrap="balance" variant="display-strong-l">
-                Visual stories shaped by simplicity and intention.
+                Davkettz
               </Heading>
             </RevealFx>
 
-            {/* SUBLINE */}
-            <RevealFx
-              translateY="8"
-              delay={0.2}
-              fillWidth
-              horizontal="center"
-              paddingBottom="32"
-            >
-              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-                I’m David — a photographer and filmmaker based in Hawai‘i.
-                I create portraits, documentaries, and visual stories crafted through
-                minimalism, natural light, and quiet emotion.
+            {/* ✅ Subline mínimo (si lo quieres 0 texto, bórralo) */}
+            <RevealFx translateY="6" delay={0.15} fillWidth horizontal="center" paddingBottom="20">
+              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-l">
+                Photography & Film
               </Text>
             </RevealFx>
 
-            {/* CTA */}
-            <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+            {/* CTA compacto */}
+            <RevealFx paddingTop="8" delay={0.25} horizontal="center" paddingLeft="12">
               <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
                 <Row gap="8" vertical="center" paddingRight="4">
                   <Avatar
@@ -199,7 +209,7 @@ export default function Home() {
                     src={person.avatar}
                     size="m"
                   />
-                  View Selected Work
+                  Work
                 </Row>
               </Button>
             </RevealFx>
@@ -226,7 +236,7 @@ export default function Home() {
                 <Heading as="h2" variant="display-strong-xs" wrap="balance">
                   Latest from the blog
                 </Heading>
-                </Row>
+              </Row>
 
               <Row flex={3} paddingX="20">
                 <Posts range={[1, 2]} columns="2" />
