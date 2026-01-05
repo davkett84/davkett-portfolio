@@ -1,3 +1,7 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 import {
   Heading,
   Text,
@@ -29,7 +33,6 @@ export async function generateMetadata() {
 
 /**
  * ✅ HOME GALLERY (separada de /gallery)
- * Coloca tus 27 mejores fotos aquí:
  * /public/images/home/
  * Nombres: Home00001.jpg ... Home00027.jpg
  */
@@ -42,22 +45,51 @@ const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
 });
 
 function HomeGallery() {
+  const images = useMemo(() => homeGalleryImages, []);
+  const [openSrc, setOpenSrc] = useState<string | null>(null);
+
   return (
     <>
       <style>{`
+        /* WRAP */
         .homeGalleryWrap {
           width: 100%;
           padding: 0 40px;
-          margin-top: 36px;
+          margin-top: 22px;
           box-sizing: border-box;
         }
 
-        /* Grid editorial fijo: 3 columnas */
+        /* Grid editorial fijo: 3 columnas (más grande) */
         .homeGalleryGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 24px;
+          gap: 26px;
           width: 100%;
+          align-items: stretch;
+        }
+
+        /* Tile: Apple-ish hover (zoom + soften + shadow) */
+        .tile {
+          border-radius: 16px;
+          overflow: hidden;
+          cursor: pointer;
+          transform: translateZ(0);
+          transition: box-shadow 240ms ease, transform 240ms ease;
+        }
+
+        /* Media internamente renderiza img; aplicamos hover con selector global */
+        .tile :global(img) {
+          transition: transform 240ms ease, filter 240ms ease;
+          will-change: transform, filter;
+        }
+
+        .tile:hover {
+          box-shadow: 0 18px 55px rgba(0,0,0,0.14);
+        }
+
+        .tile:hover :global(img) {
+          transform: scale(1.03);
+          filter: saturate(1.05) contrast(1.02) brightness(1.02);
         }
 
         /* Tablet */
@@ -77,25 +109,94 @@ function HomeGallery() {
             gap: 14px;
           }
         }
+
+        /* LIGHTBOX overlay */
+        .lightboxOverlay {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          background: rgba(0,0,0,0.72);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 22px;
+          box-sizing: border-box;
+        }
+
+        .lightboxInner {
+          max-width: min(1400px, 96vw);
+          max-height: 92vh;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .lightboxImg {
+          max-width: 100%;
+          max-height: 92vh;
+          border-radius: 18px;
+          box-shadow: 0 20px 70px rgba(0,0,0,0.35);
+          background: rgba(255,255,255,0.04);
+        }
+
+        .lightboxHint {
+          position: fixed;
+          bottom: 22px;
+          left: 50%;
+          transform: translateX(-50%);
+          color: rgba(255,255,255,0.75);
+          font-size: 12px;
+          letter-spacing: 0.02em;
+          user-select: none;
+        }
       `}</style>
 
       <div className="homeGalleryWrap">
         <div className="homeGalleryGrid">
-          {homeGalleryImages.map((image, index) => (
-            <Media
+          {images.map((image, index) => (
+            <div
               key={image.src}
-              enlarge
-              priority={index < 9}
-              sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
-              radius="m"
-              /* Ratio constante para look editorial consistente */
-              aspectRatio="4 / 3"
-              src={image.src}
-              alt={image.alt}
-            />
+              className="tile"
+              role="button"
+              tabIndex={0}
+              onClick={() => setOpenSrc(image.src)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") setOpenSrc(image.src);
+              }}
+            >
+              <Media
+                // ❗️NO usamos enlarge aquí porque enlarge te está mostrando el thumbnail grande.
+                // En su lugar, abrimos nuestro lightbox con <img> real.
+                priority={index < 9}
+                sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
+                radius="m"
+                aspectRatio="4 / 3"
+                src={image.src}
+                alt={image.alt}
+              />
+            </div>
           ))}
         </div>
       </div>
+
+      {openSrc && (
+        <div
+          className="lightboxOverlay"
+          onClick={() => setOpenSrc(null)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setOpenSrc(null);
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="lightboxInner">
+            {/* Imagen completa real */}
+            <img className="lightboxImg" src={openSrc} alt="Expanded view" />
+          </div>
+          <div className="lightboxHint">Tap / click anywhere to close</div>
+        </div>
+      )}
     </>
   );
 }
@@ -104,7 +205,7 @@ export default function Home() {
   return (
     <>
       {/* ✅ Contenido “normal” (hero + blog + footer) sigue con maxWidth="m" */}
-      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+      <Column maxWidth="m" gap="l" paddingY="12" horizontal="center">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -119,15 +220,16 @@ export default function Home() {
           }}
         />
 
-        {/* HERO */}
-        <Column fillWidth horizontal="center" gap="m">
+        {/* HERO (MINIMAL) */}
+        <Column fillWidth horizontal="center" gap="s">
           <Column maxWidth="s" horizontal="center" align="center">
+            {/* Si algún día quieres el badge, sigue soportado */}
             {home.featured.display && (
               <RevealFx
                 fillWidth
                 horizontal="center"
-                paddingTop="16"
-                paddingBottom="32"
+                paddingTop="8"
+                paddingBottom="12"
                 paddingLeft="12"
               >
                 <Badge
@@ -144,30 +246,22 @@ export default function Home() {
               </RevealFx>
             )}
 
-            {/* HEADLINE */}
-            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
+            {/* TITULO corto */}
+            <RevealFx translateY="3" fillWidth horizontal="center" paddingBottom="6">
               <Heading wrap="balance" variant="display-strong-l">
-                Visual stories shaped by simplicity and intention.
+                David Cárdenas
               </Heading>
             </RevealFx>
 
-            {/* SUBLINE */}
-            <RevealFx
-              translateY="8"
-              delay={0.2}
-              fillWidth
-              horizontal="center"
-              paddingBottom="32"
-            >
-              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-                I’m David — a photographer and filmmaker based in Hawai‘i.
-                I create portraits, documentaries, and visual stories crafted through
-                minimalism, natural light, and quiet emotion.
+            {/* SUBTITULO minimal */}
+            <RevealFx translateY="4" delay={0.12} fillWidth horizontal="center" paddingBottom="14">
+              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-l">
+                Davkettz — Photographer & Filmmaker
               </Text>
             </RevealFx>
 
-            {/* CTA */}
-            <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+            {/* CTA (mismo estilo con flecha) */}
+            <RevealFx paddingTop="6" delay={0.2} horizontal="center" paddingLeft="12">
               <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
                 <Row gap="8" vertical="center" paddingRight="4">
                   <Avatar
