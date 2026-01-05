@@ -10,6 +10,7 @@ import {
   Schema,
   Meta,
   Line,
+  Media,
 } from "@once-ui-system/core";
 
 import { home, about, person, baseURL, routes, work } from "@/resources";
@@ -24,6 +25,75 @@ export async function generateMetadata() {
     path: home.path,
     image: home.image,
   });
+}
+
+/**
+ * ✅ HOME GALLERY (separada de /gallery)
+ * Coloca tus 27 mejores fotos aquí:
+ * /public/images/home/
+ * Nombres: Home00001.jpg ... Home00027.jpg
+ */
+const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
+  const n = String(i + 1).padStart(5, "0"); // 00001 → 00027
+  return {
+    src: `/images/home/Home${n}.jpg`,
+    alt: `Home gallery image ${n}`,
+  };
+});
+
+function HomeGallery() {
+  return (
+    <>
+      <style>{`
+        .homeGalleryWrap {
+          width: 100%;
+          margin-top: 32px;
+        }
+
+        /* Grid editorial fijo: 3 columnas */
+        .homeGalleryGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+          width: 100%;
+        }
+
+        /* Tablet */
+        @media (max-width: 980px) {
+          .homeGalleryGrid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+          .homeGalleryGrid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+        }
+      `}</style>
+
+      <div className="homeGalleryWrap">
+        <div className="homeGalleryGrid">
+          {homeGalleryImages.map((image, index) => (
+            <Media
+              key={image.src}
+              enlarge
+              priority={index < 9}
+              sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
+              radius="m"
+              /* Ratio constante para que el grid se vea elegante y consistente */
+              aspectRatio="4 / 3"
+              src={image.src}
+              alt={image.alt}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default function Home() {
@@ -84,21 +154,15 @@ export default function Home() {
             paddingBottom="32"
           >
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              I’m David — a photographer and filmmaker based in Hawai‘i.  
-              I create portraits, documentaries, and visual stories crafted through  
+              I’m David — a photographer and filmmaker based in Hawai‘i.
+              I create portraits, documentaries, and visual stories crafted through
               minimalism, natural light, and quiet emotion.
             </Text>
           </RevealFx>
 
-          {/* CTA — MISMO DISEÑO, NUEVO COPY */}
+          {/* CTA */}
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
-            <Button
-              href={work.path}
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
-            >
+            <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
               <Row gap="8" vertical="center" paddingRight="4">
                 <Avatar
                   marginRight="8"
@@ -112,6 +176,9 @@ export default function Home() {
           </RevealFx>
         </Column>
       </Column>
+
+      {/* ✅ HOME GALLERY (27 images, 3 columns) */}
+      <HomeGallery />
 
       {/* BLOG SECTION */}
       {routes["/blog"] && (
