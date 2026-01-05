@@ -47,30 +47,34 @@ function HomeGallery() {
       <style>{`
         .homeGalleryWrap {
           width: 100%;
-          margin-top: 32px;
+          padding: 0 40px;
+          margin-top: 36px;
+          box-sizing: border-box;
         }
 
         /* Grid editorial fijo: 3 columnas */
         .homeGalleryGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 16px;
+          gap: 24px;
           width: 100%;
         }
 
         /* Tablet */
         @media (max-width: 980px) {
+          .homeGalleryWrap { padding: 0 24px; }
           .homeGalleryGrid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
+            gap: 18px;
           }
         }
 
         /* Mobile */
         @media (max-width: 560px) {
+          .homeGalleryWrap { padding: 0 16px; }
           .homeGalleryGrid {
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 14px;
           }
         }
       `}</style>
@@ -84,7 +88,7 @@ function HomeGallery() {
               priority={index < 9}
               sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
               radius="m"
-              /* Ratio constante para que el grid se vea elegante y consistente */
+              /* Ratio constante para look editorial consistente */
               aspectRatio="4 / 3"
               src={image.src}
               alt={image.alt}
@@ -98,115 +102,123 @@ function HomeGallery() {
 
 export default function Home() {
   return (
-    <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        path={home.path}
-        title={home.title}
-        description={home.description}
-        image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
-        }}
-      />
+    <>
+      {/* ✅ Contenido “normal” (hero + blog + footer) sigue con maxWidth="m" */}
+      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+        <Schema
+          as="webPage"
+          baseURL={baseURL}
+          path={home.path}
+          title={home.title}
+          description={home.description}
+          image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
+          author={{
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+          }}
+        />
 
-      {/* HERO */}
-      <Column fillWidth horizontal="center" gap="m">
-        <Column maxWidth="s" horizontal="center" align="center">
-          {home.featured.display && (
+        {/* HERO */}
+        <Column fillWidth horizontal="center" gap="m">
+          <Column maxWidth="s" horizontal="center" align="center">
+            {home.featured.display && (
+              <RevealFx
+                fillWidth
+                horizontal="center"
+                paddingTop="16"
+                paddingBottom="32"
+                paddingLeft="12"
+              >
+                <Badge
+                  background="brand-alpha-weak"
+                  paddingX="12"
+                  paddingY="4"
+                  onBackground="neutral-strong"
+                  textVariant="label-default-s"
+                  arrow={false}
+                  href={home.featured.href}
+                >
+                  <Row paddingY="2">{home.featured.title}</Row>
+                </Badge>
+              </RevealFx>
+            )}
+
+            {/* HEADLINE */}
+            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
+              <Heading wrap="balance" variant="display-strong-l">
+                Visual stories shaped by simplicity and intention.
+              </Heading>
+            </RevealFx>
+
+            {/* SUBLINE */}
             <RevealFx
+              translateY="8"
+              delay={0.2}
               fillWidth
               horizontal="center"
-              paddingTop="16"
               paddingBottom="32"
-              paddingLeft="12"
             >
-              <Badge
-                background="brand-alpha-weak"
-                paddingX="12"
-                paddingY="4"
-                onBackground="neutral-strong"
-                textVariant="label-default-s"
-                arrow={false}
-                href={home.featured.href}
-              >
-                <Row paddingY="2">{home.featured.title}</Row>
-              </Badge>
+              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+                I’m David — a photographer and filmmaker based in Hawai‘i.
+                I create portraits, documentaries, and visual stories crafted through
+                minimalism, natural light, and quiet emotion.
+              </Text>
             </RevealFx>
-          )}
 
-          {/* HEADLINE */}
-          <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading wrap="balance" variant="display-strong-l">
-              Visual stories shaped by simplicity and intention.
-            </Heading>
-          </RevealFx>
-
-          {/* SUBLINE */}
-          <RevealFx
-            translateY="8"
-            delay={0.2}
-            fillWidth
-            horizontal="center"
-            paddingBottom="32"
-          >
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              I’m David — a photographer and filmmaker based in Hawai‘i.
-              I create portraits, documentaries, and visual stories crafted through
-              minimalism, natural light, and quiet emotion.
-            </Text>
-          </RevealFx>
-
-          {/* CTA */}
-          <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
-            <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
-              <Row gap="8" vertical="center" paddingRight="4">
-                <Avatar
-                  marginRight="8"
-                  style={{ marginLeft: "-0.75rem" }}
-                  src={person.avatar}
-                  size="m"
-                />
-                View Selected Work
-              </Row>
-            </Button>
-          </RevealFx>
+            {/* CTA */}
+            <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+              <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
+                <Row gap="8" vertical="center" paddingRight="4">
+                  <Avatar
+                    marginRight="8"
+                    style={{ marginLeft: "-0.75rem" }}
+                    src={person.avatar}
+                    size="m"
+                  />
+                  View Selected Work
+                </Row>
+              </Button>
+            </RevealFx>
+          </Column>
         </Column>
       </Column>
 
-      {/* ✅ HOME GALLERY (27 images, 3 columns) */}
-      <HomeGallery />
+      {/* ✅ HOME GALLERY FULL-WIDTH (sale del contenedor maxWidth="m") */}
+      <div style={{ width: "100vw", marginLeft: "calc(50% - 50vw)" }}>
+        <HomeGallery />
+      </div>
 
-      {/* BLOG SECTION */}
-      {routes["/blog"] && (
-        <Column fillWidth gap="24" marginBottom="l">
-          <Row fillWidth paddingRight="64">
-            <Line maxWidth={48} />
-          </Row>
-
-          <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
-            <Row flex={1} paddingLeft="l" paddingTop="24">
-              <Heading as="h2" variant="display-strong-xs" wrap="balance">
-                Latest from the blog
-              </Heading>
+      {/* ✅ El resto vuelve a estar contenido */}
+      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+        {/* BLOG SECTION */}
+        {routes["/blog"] && (
+          <Column fillWidth gap="24" marginBottom="l">
+            <Row fillWidth paddingRight="64">
+              <Line maxWidth={48} />
             </Row>
 
-            <Row flex={3} paddingX="20">
-              <Posts range={[1, 2]} columns="2" />
+            <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
+              <Row flex={1} paddingLeft="l" paddingTop="24">
+                <Heading as="h2" variant="display-strong-xs" wrap="balance">
+                  Latest from the blog
+                </Heading>
+              </Row>
+
+              <Row flex={3} paddingX="20">
+                <Posts range={[1, 2]} columns="2" />
+              </Row>
             </Row>
-          </Row>
 
-          <Row fillWidth paddingLeft="64" horizontal="end">
-            <Line maxWidth={48} />
-          </Row>
-        </Column>
-      )}
+            <Row fillWidth paddingLeft="64" horizontal="end">
+              <Line maxWidth={48} />
+            </Row>
+          </Column>
+        )}
 
-      {/* FOOTER */}
-      <Mailchimp />
-    </Column>
+        {/* FOOTER */}
+        <Mailchimp />
+      </Column>
+    </>
   );
 }
