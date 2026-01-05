@@ -28,125 +28,106 @@ export async function generateMetadata() {
 }
 
 /**
- * ============================
- * HOME GALLERY (CLIENT ONLY)
- * ============================
+ * ✅ HOME GALLERY (separada de /gallery)
+ * /public/images/home/
+ * Nombres: Home00001.jpg ... Home00027.jpg
  */
+const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
+  const n = String(i + 1).padStart(5, "0"); // 00001 → 00027
+  return {
+    src: `/images/home/Home${n}.jpg`,
+    alt: `Home gallery image ${n}`,
+  };
+});
+
 function HomeGallery() {
-  "use client";
-
-  import { useState } from "react";
-
-  const images = Array.from({ length: 27 }, (_, i) => {
-    const n = String(i + 1).padStart(5, "0");
-    return {
-      src: `/images/home/Home${n}.jpg`,
-      alt: `Home image ${n}`,
-    };
-  });
-
-  const [openSrc, setOpenSrc] = useState<string | null>(null);
-
   return (
     <>
       <style>{`
         .homeGalleryWrap {
           width: 100%;
           padding: 0 40px;
-          margin-top: 24px;
+          margin-top: 36px;
           box-sizing: border-box;
         }
 
+        /* ✅ MÁS GRANDE: 2 columnas en desktop (tiles más grandes) */
         .homeGalleryGrid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 26px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 28px;
+          width: 100%;
         }
 
-        .tile {
+        /* Tablet */
+        @media (max-width: 980px) {
+          .homeGalleryWrap { padding: 0 24px; }
+          .homeGalleryGrid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+          .homeGalleryWrap { padding: 0 16px; }
+          .homeGalleryGrid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+        }
+
+        /* ✅ Apple-ish hover */
+        .homeTile {
           border-radius: 16px;
           overflow: hidden;
           cursor: pointer;
+          transform: translateZ(0);
           transition: box-shadow 240ms ease;
         }
 
-        .tile img {
+        .homeTile :global(img) {
           transition: transform 240ms ease, filter 240ms ease;
+          will-change: transform, filter;
         }
 
-        .tile:hover {
+        .homeTile:hover {
           box-shadow: 0 18px 55px rgba(0,0,0,0.14);
         }
 
-        .tile:hover img {
+        .homeTile:hover :global(img) {
           transform: scale(1.03);
-          filter: saturate(1.05) contrast(1.02);
-        }
-
-        @media (max-width: 980px) {
-          .homeGalleryWrap { padding: 0 24px; }
-          .homeGalleryGrid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-        }
-
-        @media (max-width: 560px) {
-          .homeGalleryWrap { padding: 0 16px; }
-          .homeGalleryGrid { grid-template-columns: 1fr; gap: 14px; }
-        }
-
-        .lightbox {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.75);
-          z-index: 9999;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 24px;
-        }
-
-        .lightbox img {
-          max-width: 96vw;
-          max-height: 92vh;
-          border-radius: 18px;
-          box-shadow: 0 20px 70px rgba(0,0,0,0.35);
+          filter: saturate(1.05) contrast(1.02) brightness(1.02);
         }
       `}</style>
 
       <div className="homeGalleryWrap">
         <div className="homeGalleryGrid">
-          {images.map((img, i) => (
-            <div key={img.src} className="tile" onClick={() => setOpenSrc(img.src)}>
+          {homeGalleryImages.map((image, index) => (
+            <div key={image.src} className="homeTile">
               <Media
-                priority={i < 9}
-                sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
+                enlarge
+                priority={index < 9}
+                sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 50vw"
                 radius="m"
+                /* Ratio constante para look editorial consistente */
                 aspectRatio="4 / 3"
-                src={img.src}
-                alt={img.alt}
+                src={image.src}
+                alt={image.alt}
               />
             </div>
           ))}
         </div>
       </div>
-
-      {openSrc && (
-        <div className="lightbox" onClick={() => setOpenSrc(null)}>
-          <img src={openSrc} alt="Expanded view" />
-        </div>
-      )}
     </>
   );
 }
 
-/**
- * ============================
- * PAGE
- * ============================
- */
 export default function Home() {
   return (
     <>
-      <Column maxWidth="m" gap="l" paddingY="12" horizontal="center">
+      {/* ✅ Contenido “normal” (hero + blog + footer) sigue con maxWidth="m" */}
+      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -161,23 +142,63 @@ export default function Home() {
           }}
         />
 
-        {/* HERO — MINIMAL */}
-        <Column fillWidth horizontal="center" gap="s">
+        {/* HERO */}
+        <Column fillWidth horizontal="center" gap="m">
           <Column maxWidth="s" horizontal="center" align="center">
-            <RevealFx>
-              <Heading variant="display-strong-l">David Cárdenas</Heading>
+            {home.featured.display && (
+              <RevealFx
+                fillWidth
+                horizontal="center"
+                paddingTop="16"
+                paddingBottom="32"
+                paddingLeft="12"
+              >
+                <Badge
+                  background="brand-alpha-weak"
+                  paddingX="12"
+                  paddingY="4"
+                  onBackground="neutral-strong"
+                  textVariant="label-default-s"
+                  arrow={false}
+                  href={home.featured.href}
+                >
+                  <Row paddingY="2">{home.featured.title}</Row>
+                </Badge>
+              </RevealFx>
+            )}
+
+            {/* HEADLINE */}
+            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
+              <Heading wrap="balance" variant="display-strong-l">
+                Visual stories shaped by simplicity and intention.
+              </Heading>
             </RevealFx>
 
-            <RevealFx delay={0.15}>
-              <Text onBackground="neutral-weak" variant="heading-default-l">
-                Davkettz — Photographer & Filmmaker
+            {/* SUBLINE */}
+            <RevealFx
+              translateY="8"
+              delay={0.2}
+              fillWidth
+              horizontal="center"
+              paddingBottom="32"
+            >
+              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+                I’m David — a photographer and filmmaker based in Hawai‘i.
+                I create portraits, documentaries, and visual stories crafted through
+                minimalism, natural light, and quiet emotion.
               </Text>
             </RevealFx>
 
-            <RevealFx delay={0.25}>
-              <Button href={work.path} variant="secondary" arrowIcon>
-                <Row gap="8" vertical="center">
-                  <Avatar src={person.avatar} size="m" />
+            {/* CTA */}
+            <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+              <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
+                <Row gap="8" vertical="center" paddingRight="4">
+                  <Avatar
+                    marginRight="8"
+                    style={{ marginLeft: "-0.75rem" }}
+                    src={person.avatar}
+                    size="m"
+                  />
                   View Selected Work
                 </Row>
               </Button>
@@ -186,13 +207,39 @@ export default function Home() {
         </Column>
       </Column>
 
-      {/* HOME GALLERY FULL WIDTH */}
+      {/* ✅ HOME GALLERY FULL-WIDTH */}
       <div style={{ width: "100vw", marginLeft: "calc(50% - 50vw)" }}>
         <HomeGallery />
       </div>
 
-      {/* FOOTER */}
-      <Column maxWidth="m" paddingY="12" horizontal="center">
+      {/* ✅ El resto vuelve a estar contenido */}
+      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+        {/* BLOG SECTION */}
+        {routes["/blog"] && (
+          <Column fillWidth gap="24" marginBottom="l">
+            <Row fillWidth paddingRight="64">
+              <Line maxWidth={48} />
+            </Row>
+
+            <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
+              <Row flex={1} paddingLeft="l" paddingTop="24">
+                <Heading as="h2" variant="display-strong-xs" wrap="balance">
+                  Latest from the blog
+                </Heading>
+                </Row>
+
+              <Row flex={3} paddingX="20">
+                <Posts range={[1, 2]} columns="2" />
+              </Row>
+            </Row>
+
+            <Row fillWidth paddingLeft="64" horizontal="end">
+              <Line maxWidth={48} />
+            </Row>
+          </Column>
+        )}
+
+        {/* FOOTER */}
         <Mailchimp />
       </Column>
     </>
