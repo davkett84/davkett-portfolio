@@ -48,7 +48,7 @@ function HomeGallery() {
           box-sizing: border-box;
         }
 
-        /* ✅ 3 columnas desktop (como quedamos) */
+        /* ✅ 3 columnas desktop */
         .homeGalleryGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -123,7 +123,8 @@ export default function Home() {
   return (
     <>
       {/* ✅ HERO minimal (casi sin texto) */}
-      <Column maxWidth="m" gap="m" paddingY="10" horizontal="center">
+      {/* IMPORTANTE: en Once UI, paddingY espera SpacingToken, no string numérico */}
+      <Column maxWidth="m" gap="m" paddingY="l" horizontal="center">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -151,7 +152,7 @@ export default function Home() {
             </Text>
           </RevealFx>
 
-          <RevealFx paddingTop="8" delay={0.2} horizontal="center">
+          <RevealFx paddingTop="s" delay={0.2} horizontal="center">
             <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
               <Row gap="8" vertical="center" paddingRight="4">
                 <Avatar
@@ -173,7 +174,7 @@ export default function Home() {
       </div>
 
       {/* ✅ FOOTER / CONTACT debajo de la galería */}
-      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+      <Column maxWidth="m" gap="xl" paddingY="l" horizontal="center">
         <Mailchimp />
       </Column>
     </>
