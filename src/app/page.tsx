@@ -8,11 +8,13 @@ import {
   Row,
   Schema,
   Meta,
+  Line,
   Media,
 } from "@once-ui-system/core";
 
-import { home, about, person, baseURL, work } from "@/resources";
+import { home, about, person, baseURL, routes, work } from "@/resources";
 import { Mailchimp } from "@/components";
+import { Posts } from "@/components/blog/Posts";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -25,12 +27,11 @@ export async function generateMetadata() {
 }
 
 /**
- * ✅ HOME GALLERY (separada de /gallery)
- * /public/images/home/
- * Nombres: Home00001.jpg ... Home00027.jpg
+ * HOME GALLERY
+ * /public/images/home/Home00001.jpg → Home00027.jpg
  */
 const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
-  const n = String(i + 1).padStart(5, "0"); // 00001 → 00027
+  const n = String(i + 1).padStart(5, "0");
   return {
     src: `/images/home/Home${n}.jpg`,
     alt: `Home gallery image ${n}`,
@@ -41,24 +42,31 @@ function HomeGallery() {
   return (
     <>
       <style>{`
+        .homeGallerySection {
+          width: 100%;
+          margin-top: 20px;
+        }
+
+        /* CENTRADO REAL */
         .homeGalleryWrap {
           width: 100%;
-          padding: 0 40px;
-          margin-top: 28px;
+          max-width: 1480px;
+          margin: 0 auto;
+          padding: 0 18px;
           box-sizing: border-box;
         }
 
-        /* ✅ 3 columnas desktop */
+        /* GRID 3 COLUMNAS */
         .homeGalleryGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 22px;
+          gap: 18px;
           width: 100%;
         }
 
         /* Tablet */
         @media (max-width: 980px) {
-          .homeGalleryWrap { padding: 0 24px; }
+          .homeGalleryWrap { padding: 0 16px; }
           .homeGalleryGrid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
@@ -67,52 +75,64 @@ function HomeGallery() {
 
         /* Mobile */
         @media (max-width: 560px) {
-          .homeGalleryWrap { padding: 0 16px; }
+          .homeGalleryWrap { padding: 0 12px; }
           .homeGalleryGrid {
             grid-template-columns: 1fr;
             gap: 14px;
           }
         }
 
-        /* ✅ Apple-ish hover */
-        .homeTile {
-          border-radius: 16px;
+        /**
+         * ✅ CLAVE:
+         * Forzamos 4:5 SOLO visualmente en el grid,
+         * pero sin usar aspectRatio prop (para que el lightbox abra la imagen real).
+         */
+        .homeGalleryGrid :global(.once-media) {
+          aspect-ratio: 4 / 5;
+          border-radius: 14px;
           overflow: hidden;
-          cursor: pointer;
-          transform: translateZ(0);
-          transition: box-shadow 240ms ease;
+
+          transition: box-shadow 200ms ease, transform 200ms ease;
+          will-change: transform;
         }
 
-        .homeTile :global(img) {
-          transition: transform 240ms ease, filter 240ms ease;
+        /* La imagen se recorta SOLO en thumbnail */
+        .homeGalleryGrid :global(.once-media img) {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 200ms ease, filter 200ms ease;
           will-change: transform, filter;
         }
 
-        .homeTile:hover {
-          box-shadow: 0 18px 55px rgba(0,0,0,0.14);
+        /* Hover Apple-ish */
+        .homeGalleryGrid :global(.once-media:hover) {
+          transform: scale(1.02);
+          box-shadow: 0 14px 42px rgba(0,0,0,0.14);
         }
 
-        .homeTile:hover :global(img) {
+        .homeGalleryGrid :global(.once-media:hover img) {
           transform: scale(1.03);
-          filter: saturate(1.05) contrast(1.02) brightness(1.02);
+          filter: saturate(1.04) contrast(1.02);
         }
       `}</style>
 
-      <div className="homeGalleryWrap">
-        <div className="homeGalleryGrid">
-          {homeGalleryImages.map((image, index) => (
-            <div key={image.src} className="homeTile">
+      <div className="homeGallerySection">
+        <div className="homeGalleryWrap">
+          <div className="homeGalleryGrid">
+            {homeGalleryImages.map((image, index) => (
               <Media
+                key={image.src}
                 enlarge
-                priority={index < 9}
+                priority={index < 6}
                 sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
                 radius="m"
-                aspectRatio="4 / 3"
+                /* ✅ IMPORTANTE: NO aspectRatio aquí */
                 src={image.src}
                 alt={image.alt}
               />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </>
@@ -121,10 +141,10 @@ function HomeGallery() {
 
 export default function Home() {
   return (
-    <>
-      {/* ✅ HERO minimal (casi sin texto) */}
-      {/* IMPORTANTE: en Once UI, paddingY espera SpacingToken, no string numérico */}
-      <Column maxWidth="m" gap="m" paddingY="l" horizontal="center">
+    // ✅ CAMBIO: padding top para que el Header sticky/fixed se vea (sin tocar layout ni galería)
+    <Column fillWidth gap="xl" horizontal="center" style={{ paddingTop: 88 }}>
+      {/* HERO */}
+      <Column maxWidth="m" gap="l" paddingY="12" horizontal="center">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -139,28 +159,19 @@ export default function Home() {
           }}
         />
 
-        <Column fillWidth horizontal="center" align="center" gap="s">
-          <RevealFx translateY="4" fillWidth horizontal="center">
-            <Heading wrap="balance" variant="display-strong-l">
-              David Cárdenas
-            </Heading>
+        <Column fillWidth horizontal="center" align="center" gap="m">
+          <RevealFx>
+            <Heading variant="display-strong-l">David Cárdenas</Heading>
           </RevealFx>
 
-          <RevealFx delay={0.1} fillWidth horizontal="center">
-            <Text onBackground="neutral-weak" variant="heading-default-m">
-              Photographer · Filmmaker
-            </Text>
+          <RevealFx delay={0.1}>
+            <Text onBackground="neutral-weak">Photographer · Filmmaker</Text>
           </RevealFx>
 
-          <RevealFx paddingTop="s" delay={0.2} horizontal="center">
-            <Button href={work.path} variant="secondary" size="m" weight="default" arrowIcon>
-              <Row gap="8" vertical="center" paddingRight="4">
-                <Avatar
-                  marginRight="8"
-                  style={{ marginLeft: "-0.75rem" }}
-                  src={person.avatar}
-                  size="m"
-                />
+          <RevealFx delay={0.2}>
+            <Button href={work.path} variant="secondary" arrowIcon>
+              <Row gap="8" vertical="center">
+                <Avatar src={person.avatar} size="s" />
                 View Selected Work
               </Row>
             </Button>
@@ -168,15 +179,37 @@ export default function Home() {
         </Column>
       </Column>
 
-      {/* ✅ HOME GALLERY FULL-WIDTH */}
-      <div style={{ width: "100vw", marginLeft: "calc(50% - 50vw)" }}>
-        <HomeGallery />
-      </div>
+      {/* GALLERY */}
+      <HomeGallery />
 
-      {/* ✅ FOOTER / CONTACT debajo de la galería */}
-      <Column maxWidth="m" gap="xl" paddingY="l" horizontal="center">
+      {/* BLOG + FOOTER */}
+      <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+        {routes["/blog"] && (
+          <Column fillWidth gap="24" marginBottom="l">
+            <Row fillWidth paddingRight="64">
+              <Line maxWidth={48} />
+            </Row>
+
+            <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
+              <Row flex={1} paddingLeft="l">
+                <Heading as="h2" variant="display-strong-xs">
+                  Latest from the blog
+                </Heading>
+              </Row>
+
+              <Row flex={3} paddingX="20">
+                <Posts range={[1, 2]} columns="2" />
+              </Row>
+            </Row>
+
+            <Row fillWidth paddingLeft="64" horizontal="end">
+              <Line maxWidth={48} />
+            </Row>
+          </Column>
+        )}
+
         <Mailchimp />
       </Column>
-    </>
+    </Column>
   );
 }
