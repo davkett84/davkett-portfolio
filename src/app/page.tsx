@@ -1,8 +1,6 @@
 import {
   Heading,
   Text,
-  Button,
-  Avatar,
   RevealFx,
   Column,
   Row,
@@ -12,7 +10,7 @@ import {
   Media,
 } from "@once-ui-system/core";
 
-import { home, about, person, baseURL, routes, work } from "@/resources";
+import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 
@@ -44,10 +42,9 @@ function HomeGallery() {
       <style>{`
         .homeGallerySection {
           width: 100%;
-          margin-top: 20px;
+          margin-top: 0; /* ✅ quitamos el espacio artificial */
         }
 
-        /* CENTRADO REAL */
         .homeGalleryWrap {
           width: 100%;
           max-width: 1480px;
@@ -56,7 +53,6 @@ function HomeGallery() {
           box-sizing: border-box;
         }
 
-        /* GRID 3 COLUMNAS */
         .homeGalleryGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -64,7 +60,6 @@ function HomeGallery() {
           width: 100%;
         }
 
-        /* Tablet */
         @media (max-width: 980px) {
           .homeGalleryWrap { padding: 0 16px; }
           .homeGalleryGrid {
@@ -73,7 +68,6 @@ function HomeGallery() {
           }
         }
 
-        /* Mobile */
         @media (max-width: 560px) {
           .homeGalleryWrap { padding: 0 12px; }
           .homeGalleryGrid {
@@ -82,30 +76,20 @@ function HomeGallery() {
           }
         }
 
-        /**
-         * ✅ CLAVE:
-         * Forzamos 4:5 SOLO visualmente en el grid,
-         * pero sin usar aspectRatio prop (para que el lightbox abra la imagen real).
-         */
         .homeGalleryGrid :global(.once-media) {
           aspect-ratio: 4 / 5;
           border-radius: 14px;
           overflow: hidden;
-
           transition: box-shadow 200ms ease, transform 200ms ease;
-          will-change: transform;
         }
 
-        /* La imagen se recorta SOLO en thumbnail */
         .homeGalleryGrid :global(.once-media img) {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 200ms ease, filter 200ms ease;
-          will-change: transform, filter;
         }
 
-        /* Hover Apple-ish */
         .homeGalleryGrid :global(.once-media:hover) {
           transform: scale(1.02);
           box-shadow: 0 14px 42px rgba(0,0,0,0.14);
@@ -127,7 +111,6 @@ function HomeGallery() {
                 priority={index < 6}
                 sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
                 radius="m"
-                /* ✅ IMPORTANTE: NO aspectRatio aquí */
                 src={image.src}
                 alt={image.alt}
               />
@@ -141,10 +124,14 @@ function HomeGallery() {
 
 export default function Home() {
   return (
-    // ✅ CAMBIO: padding top para que el Header sticky/fixed se vea (sin tocar layout ni galería)
-    <Column fillWidth gap="xl" horizontal="center" style={{ paddingTop: 88 }}>
-      {/* HERO */}
-      <Column maxWidth="m" gap="l" paddingY="12" horizontal="center">
+    <Column fillWidth gap="l" horizontal="center">
+      {/* HERO — editorial, compacto */}
+      <Column
+        maxWidth="m"
+        horizontal="center"
+        paddingTop="40"
+        paddingBottom="24"
+      >
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -159,24 +146,26 @@ export default function Home() {
           }}
         />
 
-        <Column fillWidth horizontal="center" align="center" gap="m">
-          <RevealFx>
-            <Heading variant="display-strong-l">David Cárdenas</Heading>
-          </RevealFx>
+        <div style={{ textAlign: "center" }}>
+        <RevealFx>
+  <Heading
+    variant="display-strong-m"
+    onBackground="neutral-strong"
+  >
+    David Cárdenas
+  </Heading>
+</RevealFx>
 
-          <RevealFx delay={0.1}>
-            <Text onBackground="neutral-weak">Photographer · Filmmaker</Text>
-          </RevealFx>
+<RevealFx delay={0.08}>
+  <Text
+    size="s"
+    onBackground="neutral-weak"
+  >
+    Photographer · Filmmaker
+  </Text>
+</RevealFx>
 
-          <RevealFx delay={0.2}>
-            <Button href={work.path} variant="secondary" arrowIcon>
-              <Row gap="8" vertical="center">
-                <Avatar src={person.avatar} size="s" />
-                View Selected Work
-              </Row>
-            </Button>
-          </RevealFx>
-        </Column>
+        </div>
       </Column>
 
       {/* GALLERY */}
