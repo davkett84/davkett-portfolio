@@ -68,11 +68,19 @@ function HomeGallery() {
           }
         }
 
+        /* ✅ Mobile: 2 columnas */
         @media (max-width: 560px) {
           .homeGalleryWrap { padding: 0 12px; }
           .homeGalleryGrid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+          }
+        }
+
+        /* ✅ Mobile muy angosto: 1 columna */
+        @media (max-width: 380px) {
+          .homeGalleryGrid {
             grid-template-columns: 1fr;
-            gap: 14px;
           }
         }
 
@@ -109,7 +117,7 @@ function HomeGallery() {
                 key={image.src}
                 enlarge
                 priority={index < 6}
-                sizes="(max-width: 560px) 100vw, (max-width: 980px) 50vw, 33vw"
+                sizes="(max-width: 380px) 100vw, (max-width: 560px) 50vw, (max-width: 980px) 50vw, 33vw"
                 radius="m"
                 src={image.src}
                 alt={image.alt}
@@ -147,24 +155,17 @@ export default function Home() {
         />
 
         <div style={{ textAlign: "center" }}>
-        <RevealFx>
-  <Heading
-    variant="display-strong-m"
-    onBackground="neutral-strong"
-  >
-    David Cárdenas
-  </Heading>
-</RevealFx>
+          <RevealFx>
+            <Heading variant="display-strong-m" onBackground="neutral-strong">
+              David Cárdenas
+            </Heading>
+          </RevealFx>
 
-<RevealFx delay={0.08}>
-  <Text
-    size="s"
-    onBackground="neutral-weak"
-  >
-    Photographer · Filmmaker
-  </Text>
-</RevealFx>
-
+          <RevealFx delay={0.08}>
+            <Text size="s" onBackground="neutral-weak">
+              Photographer · Filmmaker
+            </Text>
+          </RevealFx>
         </div>
       </Column>
 
