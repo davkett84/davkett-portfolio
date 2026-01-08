@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { routes, display, person, about, blog, work, gallery } from "@/resources";
+import { routes, display, person, about, work, gallery } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 
 type TimeDisplayProps = {
   timeZone: string;
-  locale?: string; // Optionally allow locale, defaulting to 'en-GB'
+  locale?: string;
 };
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" }) => {
@@ -27,13 +27,11 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
         second: "2-digit",
         hour12: false,
       };
-      const timeString = new Intl.DateTimeFormat(locale, options).format(now);
-      setCurrentTime(timeString);
+      setCurrentTime(new Intl.DateTimeFormat(locale, options).format(now));
     };
 
     updateTime();
     const intervalId = setInterval(updateTime, 1000);
-
     return () => clearInterval(intervalId);
   }, [timeZone, locale]);
 
@@ -58,6 +56,7 @@ export const Header = () => {
         height="80"
         zIndex={9}
       />
+
       <Row
         fitHeight
         className={styles.position}
@@ -68,13 +67,14 @@ export const Header = () => {
         padding="8"
         horizontal="center"
         data-border="rounded"
-        s={{
-          position: "fixed",
-        }}
+        s={{ position: "fixed" }}
       >
+        {/* LEFT */}
         <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
           {display.location && <Row s={{ hide: true }}>{person.location}</Row>}
         </Row>
+
+        {/* CENTER NAV */}
         <Row fillWidth horizontal="center">
           <Row
             background="page"
@@ -86,29 +86,15 @@ export const Header = () => {
             zIndex={1}
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
+              {/* HOME */}
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
-              )}
-              <Line background="neutral-alpha-medium" vert maxHeight="24" />
-              {routes["/about"] && (
                 <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      label={about.label}
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
+                  <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+                  <Line background="neutral-alpha-medium" vert maxHeight="24" />
                 </>
               )}
+
+              {/* WORK */}
               {routes["/work"] && (
                 <>
                   <Row s={{ hide: true }}>
@@ -128,25 +114,8 @@ export const Header = () => {
                   </Row>
                 </>
               )}
-              {routes["/blog"] && (
-                <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="book"
-                      href="/blog"
-                      label={blog.label}
-                      selected={pathname.startsWith("/blog")}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="book"
-                      href="/blog"
-                      selected={pathname.startsWith("/blog")}
-                    />
-                  </Row>
-                </>
-              )}
+
+              {/* GALLERY */}
               {routes["/gallery"] && (
                 <>
                   <Row s={{ hide: true }}>
@@ -166,6 +135,28 @@ export const Header = () => {
                   </Row>
                 </>
               )}
+
+              {/* CONTACT (usa icono existente) */}
+              {routes["/about"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="person"
+                      href="/about"
+                      label="Contact"
+                      selected={pathname === "/about"}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="person"
+                      href="/about"
+                      selected={pathname === "/about"}
+                    />
+                  </Row>
+                </>
+              )}
+
               {display.themeSwitcher && (
                 <>
                   <Line background="neutral-alpha-medium" vert maxHeight="24" />
@@ -175,6 +166,8 @@ export const Header = () => {
             </Row>
           </Row>
         </Row>
+
+        {/* RIGHT */}
         <Flex fillWidth horizontal="end" vertical="center">
           <Flex
             paddingRight="12"

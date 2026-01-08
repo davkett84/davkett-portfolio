@@ -156,24 +156,32 @@ export default function Home() {
 
         <div style={{ textAlign: "center" }}>
           <RevealFx>
-           <Heading
-  variant="display-strong-m"
-  onBackground="neutral-strong"
-  style={{
-    fontFamily: "Canela, serif",
-    fontWeight: 500,
-    letterSpacing: "-0.02em",
-    lineHeight: "1.05",
-  }}
->
-  David Cardenas
-</Heading>
-
+            <Heading
+              variant="display-strong-m"
+              onBackground="neutral-strong"
+              style={{
+                fontFamily: "Canela, serif",
+                fontWeight: 500,
+                letterSpacing: "-0.02em",
+                lineHeight: "1.05",
+                // ✅ Nombre más grande (responsive y elegante)
+                fontSize: "clamp(52px, 5vw, 76px)",
+              }}
+            >
+              David Cardenas
+            </Heading>
           </RevealFx>
 
           <RevealFx delay={0.08}>
-            <Text size="s" onBackground="neutral-weak">
-              Photographer · Filmmaker
+            <Text
+              size="s"
+              onBackground="neutral-weak"
+              style={{
+                // ✅ un toque editorial (opcional, pero se ve mejor)
+                letterSpacing: "0.02em",
+              }}
+            >
+              Visual Storytelling
             </Text>
           </RevealFx>
         </div>
