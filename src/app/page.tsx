@@ -156,9 +156,19 @@ export default function Home() {
 
         <div style={{ textAlign: "center" }}>
           <RevealFx>
-            <Heading variant="display-strong-m" onBackground="neutral-strong">
-              David Cárdenas
-            </Heading>
+           <Heading
+  variant="display-strong-m"
+  onBackground="neutral-strong"
+  style={{
+    fontFamily: "Canela, serif",
+    fontWeight: 500,
+    letterSpacing: "-0.02em",
+    lineHeight: "1.05",
+  }}
+>
+  David Cardenas
+</Heading>
+
           </RevealFx>
 
           <RevealFx delay={0.08}>
