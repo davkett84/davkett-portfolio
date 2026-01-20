@@ -13,7 +13,7 @@ import {
   SpacingToken,
 } from "@once-ui-system/core";
 
-import { Header, Footer, RouteGuard, Providers } from "@/components";
+import { Header, Footer, Providers } from "@/components";
 import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
 
 export async function generateMetadata() {
@@ -41,7 +41,7 @@ export default function RootLayout({
         fonts.heading.variable,
         fonts.body.variable,
         fonts.label.variable,
-        fonts.code.variable,
+        fonts.code.variable
       )}
     >
       <head>
@@ -107,13 +107,17 @@ export default function RootLayout({
           as="body"
           background="page"
           fillWidth
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: "100vh", position: "relative" }}
           margin="0"
           padding="0"
           horizontal="center"
         >
-          {/* Background normal, sin overlays blancos */}
-          <RevealFx fill position="absolute">
+          {/* ✅ Background guaranteed behind everything */}
+          <RevealFx
+            fill
+            position="absolute"
+            style={{ pointerEvents: "none", zIndex: -1 }}
+          >
             <Background
               mask={{
                 x: effects.mask.x,
@@ -152,18 +156,12 @@ export default function RootLayout({
             />
           </RevealFx>
 
-          {/* Header limpio, sin offsets */}
           <Header />
 
-          <Flex
-            zIndex={0}
-            fillWidth
-            padding="l"
-            horizontal="center"
-            flex={1}
-          >
+          <Flex fillWidth padding="l" horizontal="center" flex={1}>
             <Flex horizontal="center" fillWidth minHeight="0">
-              <RouteGuard>{children}</RouteGuard>
+              {/* ✅ TEMP: no RouteGuard */}
+              {children}
             </Flex>
           </Flex>
 

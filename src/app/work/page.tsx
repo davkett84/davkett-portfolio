@@ -14,24 +14,31 @@ export async function generateMetadata() {
 
 export default function Work() {
   return (
-    <Column maxWidth="m" paddingTop="24">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        path={work.path}
-        title={work.title}
-        description={work.description}
-        image={`/api/og/generate?title=${encodeURIComponent(work.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
-        }}
-      />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
-      </Heading>
-      <Projects />
+    <Column fillWidth horizontal="center" paddingTop="24">
+      <Column fillWidth maxWidth="m">
+        <Schema
+          as="webPage"
+          baseURL={baseURL}
+          path={work.path}
+          title={work.title}
+          description={work.description}
+          image={`/api/og/generate?title=${encodeURIComponent(work.title)}`}
+          author={{
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+          }}
+        />
+
+        <Heading marginBottom="l" variant="heading-strong-xl" align="center">
+          {work.title}
+        </Heading>
+      </Column>
+
+      {/* ✅ Projects needs full width, not trapped in maxWidth="m" */}
+      <Column fillWidth>
+        <Projects />
+      </Column>
     </Column>
   );
 }
