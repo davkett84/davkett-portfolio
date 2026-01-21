@@ -7,12 +7,12 @@ import {
   Schema,
   Meta,
   Line,
-  Media,
 } from "@once-ui-system/core";
 
 import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";
+import HomeGallery from "@/components/HomeGallery";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -24,116 +24,10 @@ export async function generateMetadata() {
   });
 }
 
-/**
- * HOME GALLERY
- * /public/images/home/Home00001.jpg → Home00027.jpg
- */
-const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
-  const n = String(i + 1).padStart(5, "0");
-  return {
-    src: `/images/home/Home${n}.jpg`,
-    alt: `Home gallery image ${n}`,
-  };
-});
-
-function HomeGallery() {
-  return (
-    <>
-      <style>{`
-        .homeGallerySection {
-          width: 100%;
-          margin-top: 0; /* ✅ quitamos el espacio artificial */
-        }
-
-        .homeGalleryWrap {
-          width: 100%;
-          max-width: 1480px;
-          margin: 0 auto;
-          padding: 0 18px;
-          box-sizing: border-box;
-        }
-
-        .homeGalleryGrid {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 18px;
-          width: 100%;
-        }
-
-        @media (max-width: 980px) {
-          .homeGalleryWrap { padding: 0 16px; }
-          .homeGalleryGrid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-          }
-        }
-
-        /* ✅ Mobile: 2 columnas */
-        @media (max-width: 560px) {
-          .homeGalleryWrap { padding: 0 12px; }
-          .homeGalleryGrid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-          }
-        }
-
-        /* ✅ Mobile muy angosto: 1 columna */
-        @media (max-width: 380px) {
-          .homeGalleryGrid {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .homeGalleryGrid :global(.once-media) {
-          aspect-ratio: 4 / 5;
-          border-radius: 14px;
-          overflow: hidden;
-          transition: box-shadow 200ms ease, transform 200ms ease;
-        }
-
-        .homeGalleryGrid :global(.once-media img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 200ms ease, filter 200ms ease;
-        }
-
-        .homeGalleryGrid :global(.once-media:hover) {
-          transform: scale(1.02);
-          box-shadow: 0 14px 42px rgba(0,0,0,0.14);
-        }
-
-        .homeGalleryGrid :global(.once-media:hover img) {
-          transform: scale(1.03);
-          filter: saturate(1.04) contrast(1.02);
-        }
-      `}</style>
-
-      <div className="homeGallerySection">
-        <div className="homeGalleryWrap">
-          <div className="homeGalleryGrid">
-            {homeGalleryImages.map((image, index) => (
-              <Media
-                key={image.src}
-                enlarge
-                priority={index < 6}
-                sizes="(max-width: 380px) 100vw, (max-width: 560px) 50vw, (max-width: 980px) 50vw, 33vw"
-                radius="m"
-                src={image.src}
-                alt={image.alt}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export default function Home() {
   return (
     <Column fillWidth gap="l" horizontal="center">
-      {/* HERO — editorial, compacto */}
+      {/* HERO */}
       <Column
         maxWidth="m"
         horizontal="center"
@@ -164,7 +58,6 @@ export default function Home() {
                 fontWeight: 500,
                 letterSpacing: "-0.02em",
                 lineHeight: "1.05",
-                // ✅ Nombre más grande (responsive y elegante)
                 fontSize: "clamp(52px, 5vw, 76px)",
               }}
             >
@@ -176,10 +69,7 @@ export default function Home() {
             <Text
               size="s"
               onBackground="neutral-weak"
-              style={{
-                // ✅ un toque editorial (opcional, pero se ve mejor)
-                letterSpacing: "0.02em",
-              }}
+              style={{ letterSpacing: "0.02em" }}
             >
               Visual Storytelling
             </Text>
