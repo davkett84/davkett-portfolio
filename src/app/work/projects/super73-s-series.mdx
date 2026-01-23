@@ -1,3 +1,8 @@
+"use client"
+
+import React, { useMemo, useRef, useState } from "react"
+import { Media } from "@once-ui-system/core"
+
 ---
 title: "Super73 — S Series"
 publishedAt: "2025-05-10"
@@ -18,7 +23,163 @@ btsImages:
   - "/images/projects/super73/bts-02.jpg"
 ---
 
-import { Media } from "@once-ui-system/core"
+export const Gallery = () => {
+  const dialogRef = useRef(null)
+  const [activeIndex, setActiveIndex] = useState(null)
+
+  const images = useMemo(
+    () => [
+      "/images/projects/super73/image-01.jpg",
+      "/images/projects/super73/image-02.jpg",
+      "/images/projects/super73/image-03.jpg",
+      "/images/projects/super73/image-04.jpg",
+      "/images/projects/super73/image-05.jpg",
+      "/images/projects/super73/image-06.jpg",
+      "/images/projects/super73/image-07.jpg",
+      "/images/projects/super73/image-08.jpg",
+      "/images/projects/super73/image-09.jpg",
+      "/images/projects/super73/image-10.jpg",
+    ],
+    []
+  )
+
+  const active = activeIndex === null ? null : images[activeIndex] || null
+
+  const open = (i) => {
+    setActiveIndex(i)
+    requestAnimationFrame(() => dialogRef.current?.showModal?.())
+  }
+
+  const close = () => {
+    dialogRef.current?.close?.()
+    setActiveIndex(null)
+  }
+
+  const prev = () => {
+    if (activeIndex === null) return
+    setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1))
+  }
+
+  const next = () => {
+    if (activeIndex === null) return
+    setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1))
+  }
+
+  return (
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "24px",
+        }}
+      >
+        {images.map((src, i) => (
+          <button
+            key={src}
+            type="button"
+            onClick={() => open(i)}
+            style={{ all: "unset", cursor: "zoom-in", display: "block" }}
+            aria-label="Open image"
+          >
+            <Media src={src} radius="m" />
+          </button>
+        ))}
+      </div>
+
+      <dialog
+        ref={dialogRef}
+        onClick={(e) => {
+          // click backdrop to close
+          if (e.target === dialogRef.current) close()
+        }}
+        style={{
+          border: "none",
+          padding: 0,
+          background: "transparent",
+          maxWidth: "min(1100px, 95vw)",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            background: "rgba(0,0,0,0.75)",
+            padding: "18px",
+            borderRadius: "16px",
+          }}
+        >
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close"
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              width: "40px",
+              height: "40px",
+              borderRadius: "999px",
+              border: "1px solid rgba(255,255,255,0.25)",
+              background: "rgba(0,0,0,0.45)",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            ✕
+          </button>
+
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Previous"
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: "44px",
+              height: "44px",
+              borderRadius: "999px",
+              border: "1px solid rgba(255,255,255,0.25)",
+              background: "rgba(0,0,0,0.45)",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            ‹
+          </button>
+
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Next"
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: "44px",
+              height: "44px",
+              borderRadius: "999px",
+              border: "1px solid rgba(255,255,255,0.25)",
+              background: "rgba(0,0,0,0.45)",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            ›
+          </button>
+
+          {active && (
+            <div style={{ maxHeight: "85vh", overflow: "hidden", borderRadius: "12px" }}>
+              <Media src={active} radius="none" />
+            </div>
+          )}
+        </div>
+      </dialog>
+    </>
+  )
+}
 
 ## Overview
 
@@ -32,34 +193,4 @@ Close frames alternate with wider scenes to highlight both design and attitude, 
 
 ## Gallery
 
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "24px",
-  }}
->
-  {[
-    "/images/projects/super73/image-01.jpg",
-    "/images/projects/super73/image-02.jpg",
-    "/images/projects/super73/image-03.jpg",
-    "/images/projects/super73/image-04.jpg",
-    "/images/projects/super73/image-05.jpg",
-    "/images/projects/super73/image-06.jpg",
-    "/images/projects/super73/image-07.jpg",
-    "/images/projects/super73/image-08.jpg",
-    "/images/projects/super73/image-09.jpg",
-    "/images/projects/super73/image-10.jpg",
-  ].map((src) => (
-    <a
-      key={src}
-      href={src}
-      target="_blank"
-      rel="noreferrer"
-      style={{ display: "block", cursor: "zoom-in" }}
-      aria-label="Open image"
-    >
-      <Media src={src} radius="m" />
-    </a>
-  ))}
-</div>
+<Gallery />
