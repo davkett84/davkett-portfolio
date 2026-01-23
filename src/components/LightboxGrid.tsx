@@ -155,9 +155,31 @@ export default function LightboxGrid({
               ›
             </button>
 
-            <div style={{ maxHeight: "90vh", overflow: "hidden", borderRadius: "16px" }}>
-              <Media src={activeSrc} radius="none" />
-            </div>
+            <div
+  style={{
+    width: "100%",
+    maxHeight: "90vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "16px",
+    overflow: "hidden",
+    background: "rgba(0,0,0,0.15)",
+  }}
+>
+  <img
+    src={activeSrc}
+    alt=""
+    style={{
+      width: "100%",
+      height: "auto",
+      maxHeight: "90vh",
+      objectFit: "contain",
+      display: "block",
+    }}
+  />
+</div>
+
           </div>
         </div>
       )}
