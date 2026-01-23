@@ -22,8 +22,11 @@ import { Media } from "@once-ui-system/core"
 
 ## Overview
 
-Super73 S-Series captured as a lifestyle object —  
-design, motion, and attitude photographed in real environments.
+This project presents the Super73 S-Series as part of a lifestyle — not a product on display.  
+Shot entirely in natural light, the series focuses on texture, detail, and human presence: hands on grips, movement in denim, and sunlight filtering through trees.
+
+The intention was to create images that feel relaxed, confident, and naturally integrated into real environments.  
+Close frames alternate with wider scenes to highlight both design and attitude, letting the S-Series feel lived-in, approachable, and authentic.
 
 ---
 
@@ -36,14 +39,27 @@ design, motion, and attitude photographed in real environments.
     gap: "24px",
   }}
 >
-  <Media src="/images/projects/super73/image-01.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-02.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-03.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-04.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-05.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-06.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-07.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-08.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-09.jpg" radius="m" />
-  <Media src="/images/projects/super73/image-10.jpg" radius="m" />
+  {[
+    "/images/projects/super73/image-01.jpg",
+    "/images/projects/super73/image-02.jpg",
+    "/images/projects/super73/image-03.jpg",
+    "/images/projects/super73/image-04.jpg",
+    "/images/projects/super73/image-05.jpg",
+    "/images/projects/super73/image-06.jpg",
+    "/images/projects/super73/image-07.jpg",
+    "/images/projects/super73/image-08.jpg",
+    "/images/projects/super73/image-09.jpg",
+    "/images/projects/super73/image-10.jpg",
+  ].map((src) => (
+    <a
+      key={src}
+      href={src}
+      target="_blank"
+      rel="noreferrer"
+      style={{ display: "block", cursor: "zoom-in" }}
+      aria-label="Open image"
+    >
+      <Media src={src} radius="m" />
+    </a>
+  ))}
 </div>
