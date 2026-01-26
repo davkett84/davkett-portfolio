@@ -64,7 +64,25 @@ export default function LightboxGrid({
             aria-label="Open image"
             style={{ all: "unset", cursor: "zoom-in", display: "block" }}
           >
-            <Media src={src} radius={radius} />
+           <div
+  style={{
+    width: "100%",
+    aspectRatio: "4 / 5", // 👈 elige el ratio
+    overflow: "hidden",
+    borderRadius: "12px",
+  }}
+>
+  <Media
+    src={src}
+    radius="none"
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
+</div>
+
           </button>
         ))}
       </div>
