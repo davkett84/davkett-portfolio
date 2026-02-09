@@ -66,7 +66,7 @@ export default function About() {
           sports, performance-driven projects, and creative brands.
         </Text>
 
-        {/* EMAIL CTA (ICON, BIGGER, BEFORE IMAGE) */}
+        {/* EMAIL CTA (CENTERED, BIGGER VIA PADDING) */}
         {social
           .filter((item) => item.name.toLowerCase() === "email")
           .map(
@@ -76,9 +76,13 @@ export default function About() {
                   key={item.name}
                   href={item.link}
                   icon={item.icon}
-                  size="xl"
+                  size="l"
                   variant="secondary"
-                  style={{ marginTop: 16, marginBottom: 24 }}
+                  style={{
+                    marginTop: 16,
+                    marginBottom: 24,
+                    padding: 14,
+                  }}
                 />
               ),
           )}
