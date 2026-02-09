@@ -139,15 +139,62 @@ const gallery: Gallery = {
       orientation: "vertical",
     },
 
-    // 🔹 CORPORATE (IMÁGENES DEFAULT TEMPORALES)
-    { src: "/images/gallery/horizontal-1.jpg", alt: "Corporate photography", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-2.jpg", alt: "Corporate photography", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-3.jpg", alt: "Corporate photography", orientation: "horizontal" },
-    { src: "/images/gallery/horizontal-4.jpg", alt: "Corporate photography", orientation: "horizontal" },
-    { src: "/images/gallery/vertical-1.jpg", alt: "Corporate photography", orientation: "vertical" },
-    { src: "/images/gallery/vertical-2.jpg", alt: "Corporate photography", orientation: "vertical" },
-    { src: "/images/gallery/vertical-3.jpg", alt: "Corporate photography", orientation: "vertical" },
-    { src: "/images/gallery/vertical-4.jpg", alt: "Corporate photography", orientation: "vertical" },
+    // 🔹 COMMERCIAL (01–11)
+    {
+      src: "/images/gallery/Commercial 00001.jpg",
+      alt: "Commercial image 1",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Commercial 00002.jpg",
+      alt: "Commercial image 2",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Commercial 00003.jpg",
+      alt: "Commercial image 3",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Commercial 00004.jpg",
+      alt: "Commercial image 4",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Commercial 00005.jpg",
+      alt: "Commercial image 5",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Commercial 00006.jpg",
+      alt: "Commercial image 6",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Commercial 00007.jpg",
+      alt: "Commercial image 7",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Commercial 00008.jpg",
+      alt: "Commercial image 8",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Commercial 00009.jpg",
+      alt: "Commercial image 9",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/Commercial 00010.jpg",
+      alt: "Commercial image 10",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/Commercial 00011.jpg",
+      alt: "Commercial image 11",
+      orientation: "vertical",
+    },
   ],
 };
 
