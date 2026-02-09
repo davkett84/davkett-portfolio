@@ -79,7 +79,7 @@ export default function About() {
         {/* HERO IMAGE */}
         <Row
           fillWidth
-          justify="center"
+          horizontal="center"
           marginTop="24"
           style={{ maxWidth: 720 }}
         >
