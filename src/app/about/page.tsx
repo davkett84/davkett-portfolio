@@ -7,7 +7,6 @@ import {
   Meta,
   Schema,
   Row,
-  IconButton,
 } from "@once-ui-system/core";
 import { baseURL, about, person, social } from "@/resources";
 import React from "react";
@@ -66,22 +65,24 @@ export default function About() {
           sports, performance-driven projects, and creative brands.
         </Text>
 
-        {/* EMAIL CTA (CENTERED, BIGGER VIA PADDING) */}
+        {/* EMAIL CTA (ICON + TEXT, CENTERED, BEFORE IMAGE) */}
         {social
           .filter((item) => item.name.toLowerCase() === "email")
           .map(
             (item) =>
               item.link && (
-                <IconButton
+                <Button
                   key={item.name}
                   href={item.link}
-                  icon={item.icon}
-                  size="l"
+                  prefixIcon={item.icon}
+                  label="Email"
+                  size="m"
                   variant="secondary"
                   style={{
                     marginTop: 16,
                     marginBottom: 24,
-                    padding: 14,
+                    paddingInline: 18,
+                    paddingBlock: 10,
                   }}
                 />
               ),
