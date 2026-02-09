@@ -7,9 +7,9 @@ import {
   Meta,
   Schema,
   Row,
+  IconButton,
 } from "@once-ui-system/core";
 import { baseURL, about, person, social } from "@/resources";
-import styles from "@/components/about/about.module.scss";
 import React from "react";
 
 export async function generateMetadata() {
@@ -42,41 +42,51 @@ export default function About() {
       {/* HERO */}
       <Column
         fillWidth
-        align="center"
+        horizontal="center"
+        vertical="center"
         gap="s"
         paddingTop="l"
         paddingBottom="l"
       >
         {/* NAME */}
-        <Heading variant="display-strong-xl" className={styles.textAlign}>
+        <Heading
+          variant="display-strong-xl"
+          style={{ textAlign: "center" }}
+        >
           {person.name}
         </Heading>
-
-        {/* ROLE */}
-        <Text
-          variant="display-default-xs"
-          onBackground="neutral-weak"
-          className={styles.textAlign}
-        >
-          {person.role}
-        </Text>
 
         {/* STATEMENT */}
         <Text
           variant="body-default-l"
           onBackground="neutral-weak"
-          className={styles.textAlign}
-          style={{ maxWidth: 560 }}
+          style={{ maxWidth: 560, textAlign: "center" }}
         >
           Photographer and filmmaker based in Hawai‘i, creating visual work across
           sports, performance-driven projects, and creative brands.
         </Text>
 
+        {/* EMAIL CTA (ICON, BIGGER, BEFORE IMAGE) */}
+        {social
+          .filter((item) => item.name.toLowerCase() === "email")
+          .map(
+            (item) =>
+              item.link && (
+                <IconButton
+                  key={item.name}
+                  href={item.link}
+                  icon={item.icon}
+                  size="xl"
+                  variant="secondary"
+                  style={{ marginTop: 16, marginBottom: 24 }}
+                />
+              ),
+          )}
+
         {/* HERO IMAGE */}
         <Row
           fillWidth
           horizontal="center"
-          marginTop="24"
           style={{ maxWidth: 880 }}
         >
           <Media
@@ -87,24 +97,6 @@ export default function About() {
             sizes="(max-width: 768px) 92vw, 880px"
           />
         </Row>
-
-        {/* EMAIL CTA */}
-        {social
-          .filter((item) => item.name.toLowerCase() === "email")
-          .map(
-            (item) =>
-              item.link && (
-                <Button
-                  key={item.name}
-                  href={item.link}
-                  prefixIcon={item.icon}
-                  label="Email"
-                  size="s"
-                  variant="secondary"
-                  style={{ marginTop: 24 }}
-                />
-              ),
-          )}
       </Column>
     </Column>
   );
