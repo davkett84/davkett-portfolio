@@ -50,6 +50,7 @@ export default function About() {
       items: about.technical.skills.map((skill) => skill.title),
     },
   ];
+
   return (
     <Column maxWidth="m">
       <Schema
@@ -65,6 +66,7 @@ export default function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+
       {about.tableOfContent.display && (
         <Column
           left="0"
@@ -77,7 +79,8 @@ export default function About() {
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
-      <Row fillWidth s={{ direction: "column"}} horizontal="center">
+
+      <Row fillWidth s={{ direction: "column" }} horizontal="center">
         {about.avatar.display && (
           <Column
             className={styles.avatar}
@@ -93,22 +96,24 @@ export default function About() {
             flex={3}
             horizontal="center"
           >
-            <Avatar src={person.avatar} size="xl" />
+            <Avatar src={person.avatar} size="l" />
+
             <Row gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
             </Row>
+
             {person.languages && person.languages.length > 0 && (
-              <Row wrap gap="8">
-                {person.languages.map((language, index) => (
-                  <Tag key={index} size="l">
-                    {language}
-                  </Tag>
-                ))}
+              <Row gap="8" vertical="center" wrap>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Languages:
+                </Text>
+                <Text variant="body-default-s">{person.languages.join(" / ")}</Text>
               </Row>
             )}
           </Column>
         )}
+
         <Column className={styles.blockAlign} flex={9} maxWidth={40}>
           <Column
             id={about.intro.title}
@@ -142,9 +147,11 @@ export default function About() {
                 />
               </Row>
             )}
+
             <Heading className={styles.textAlign} variant="display-strong-xl">
               {person.name}
             </Heading>
+
             <Text
               className={styles.textAlign}
               variant="display-default-xs"
@@ -152,6 +159,17 @@ export default function About() {
             >
               {person.role}
             </Text>
+
+            <Text
+              className={styles.textAlign}
+              variant="body-default-l"
+              onBackground="neutral-weak"
+              style={{ maxWidth: 560, marginTop: 12 }}
+            >
+              Photographer and filmmaker based in Hawai‘i, creating visual work across sports,
+              performance-driven projects, and creative brands.
+            </Text>
+
             {social.length > 0 && (
               <Row
                 className={styles.blockAlign}
@@ -162,6 +180,7 @@ export default function About() {
                 horizontal="center"
                 fitWidth
                 data-border="rounded"
+                style={{ opacity: 0.9 }}
               >
                 {social.map(
                   (item) =>
@@ -180,7 +199,7 @@ export default function About() {
                         </Row>
                         <Row hide s={{ hide: false }}>
                           <IconButton
-                            size="l"
+                            size="m"
                             key={`${item.name}-icon`}
                             href={item.link}
                             icon={item.icon}
