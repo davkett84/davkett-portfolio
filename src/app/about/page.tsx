@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Column,
   Heading,
@@ -44,13 +43,10 @@ export default function About() {
       <Column
         fillWidth
         align="center"
-        gap="m"
-        paddingTop="xl"
-        paddingBottom="xl"
+        gap="s"
+        paddingTop="l"
+        paddingBottom="l"
       >
-        {/* AVATAR */}
-        <Avatar src={person.avatar} size="s" />
-
         {/* NAME */}
         <Heading variant="display-strong-xl" className={styles.textAlign}>
           {person.name}
@@ -81,14 +77,14 @@ export default function About() {
           fillWidth
           horizontal="center"
           marginTop="24"
-          style={{ maxWidth: 720 }}
+          style={{ maxWidth: 880 }}
         >
           <Media
             src="/images/about/about-hero.jpg"
-            alt="David Cárdenas portrait"
+            alt="David Cárdenas"
             radius="l"
             aspectRatio="16 / 9"
-            sizes="(max-width: 768px) 92vw, 720px"
+            sizes="(max-width: 768px) 92vw, 880px"
           />
         </Row>
 
