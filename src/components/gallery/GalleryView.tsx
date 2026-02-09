@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Media, MasonryGrid, Flex, Text } from "@once-ui-system/core";
 import { gallery } from "@/resources";
 
-type Category = "portraits" | "corporate";
+type Category = "portraits" | "commercial";
 
 // 🔒 CORTE EXACTO
 const PORTRAITS_COUNT = 5;
