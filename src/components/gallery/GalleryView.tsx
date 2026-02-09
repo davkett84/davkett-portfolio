@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Media, MasonryGrid, Flex, Text } from "@once-ui-system/core";
+import { Media, MasonryGrid, Text } from "@once-ui-system/core";
 import { gallery } from "@/resources";
 
 type Category = "portraits" | "commercial";
@@ -10,13 +10,10 @@ type Category = "portraits" | "commercial";
 const PORTRAITS_COUNT = 5;
 
 export default function GalleryView() {
-  const [activeCategory, setActiveCategory] =
-    useState<Category>("portraits");
+  const [activeCategory, setActiveCategory] = useState<Category>("portraits");
 
   const filteredImages = gallery.images.filter((_, index) => {
-    if (activeCategory === "portraits") {
-      return index < PORTRAITS_COUNT;
-    }
+    if (activeCategory === "portraits") return index < PORTRAITS_COUNT;
     return index >= PORTRAITS_COUNT;
   });
 
@@ -68,22 +65,22 @@ export default function GalleryView() {
             )}
           </div>
 
-          {/* CORPORATE */}
+          {/* COMMERCIAL */}
           <div
             className="gallery-filter-item"
-            onClick={() => setActiveCategory("corporate")}
+            onClick={() => setActiveCategory("commercial")}
             style={{ cursor: "pointer" }}
           >
             <Text
               style={{
-                fontWeight: activeCategory === "corporate" ? 600 : 400,
-                opacity: activeCategory === "corporate" ? 1 : 0.45,
+                fontWeight: activeCategory === "commercial" ? 600 : 400,
+                opacity: activeCategory === "commercial" ? 1 : 0.45,
                 letterSpacing: "0.04em",
               }}
             >
-              Corporate
+              Commercial
             </Text>
-            {activeCategory === "corporate" && (
+            {activeCategory === "commercial" && (
               <div
                 style={{
                   height: 1,
@@ -105,9 +102,7 @@ export default function GalleryView() {
               priority={index < 10}
               sizes="(max-width: 560px) 100vw, 50vw"
               radius="m"
-              aspectRatio={
-                image.orientation === "horizontal" ? "16 / 9" : "3 / 4"
-              }
+              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
               src={image.src}
               alt={image.alt}
             />
