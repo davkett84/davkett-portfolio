@@ -12,11 +12,11 @@ import { Line, Logo, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
   firstName: "David",
-  lastName: "Cárdenas",
-  name: "David Cárdenas",
-  role: "Photographer",
+  lastName: "Cardenas",
+  name: "David Cardenas",
+  role: "Photographer · Filmmaker",
   avatar: "/images/avatar.jpg",
-  email: "info@davkettz.com",
+  email: "info@davkett.com",
   location: "Pacific/Honolulu",
   languages: ["English", "Spanish"],
 };
@@ -54,9 +54,8 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name} – Photography Portfolio`,
-  description:
-    "Minimalist photography portfolio by David Cárdenas — portraits, weddings, and resort stories captured through natural light and emotion.",
+  title: `${person.name}`,
+  description: "Photographer · Filmmaker based in Hawaii. Available worldwide.",
   headline: <>Stories told through light and stillness.</>,
   featured: {
     display: false,
@@ -65,8 +64,9 @@ const home: Home = {
   },
   subline: (
     <>
-      I’m David, a photographer based in Hawaii. I focus on natural-light portraits,
-      destination weddings, and visual storytelling for brands and resorts.
+      I’m David, a photographer and filmmaker based in Hawaii. I create natural-light
+      portraits, destination weddings, and visual storytelling for brands and resorts —
+      with a calm, cinematic approach.
     </>
   ),
 };
@@ -75,7 +75,7 @@ const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Learn more about ${person.name}, a photographer based in Hawaii.`,
+  description: `Learn more about ${person.name}, a photographer and filmmaker based in Hawaii.`,
   tableOfContent: {
     display: false,
     subItems: false,
@@ -85,7 +85,7 @@ const about: About = {
   intro: {
     display: true,
     title: "About Me",
-    description: <>Photographer based in Hawaii.</>,
+    description: <>Photographer · Filmmaker based in Hawaii.</>,
   },
   work: { display: false, title: "", experiences: [] },
   studies: { display: false, title: "", institutions: [] },
