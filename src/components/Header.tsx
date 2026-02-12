@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { routes, display, person, about, work, gallery } from "@/resources";
+import { routes, display, person, work, gallery } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 
@@ -38,10 +38,21 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
   return <>{currentTime}</>;
 };
 
-export default TimeDisplay;
-
 export const Header = () => {
   const pathname = usePathname() ?? "";
+
+  // Safe labels (avoid crashing when work/gallery are undefined during prerender/build)
+  const workLabel =
+    (work as any)?.label ??
+    (routes as any)?.["/work"]?.label ??
+    (routes as any)?.["/work"]?.name ??
+    "Work";
+
+  const galleryLabel =
+    (gallery as any)?.label ??
+    (routes as any)?.["/gallery"]?.label ??
+    (routes as any)?.["/gallery"]?.name ??
+    "Gallery";
 
   return (
     <>
@@ -101,7 +112,7 @@ export const Header = () => {
                     <ToggleButton
                       prefixIcon="grid"
                       href="/work"
-                      label={work.label}
+                      label={workLabel}
                       selected={pathname.startsWith("/work")}
                     />
                   </Row>
@@ -122,7 +133,7 @@ export const Header = () => {
                     <ToggleButton
                       prefixIcon="gallery"
                       href="/gallery"
-                      label={gallery.label}
+                      label={galleryLabel}
                       selected={pathname.startsWith("/gallery")}
                     />
                   </Row>
@@ -136,7 +147,7 @@ export const Header = () => {
                 </>
               )}
 
-              {/* CONTACT (usa icono existente) */}
+              {/* CONTACT */}
               {routes["/about"] && (
                 <>
                   <Row s={{ hide: true }}>
