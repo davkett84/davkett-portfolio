@@ -80,11 +80,32 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
 }
 
 function slugify(str: string): string {
-  const strWithAnd = str.replace(/&/g, " and "); // Replace & with 'and'
+  const strWithAnd = str.replace(/&/g, " and ");
   return transliterate(strWithAnd, {
     lowercase: true,
-    separator: "-", // Replace spaces with -
-  }).replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    separator: "-",
+  }).replace(/\-\-+/g, "-");
+}
+
+/**
+ * Convert MDX heading children into plain text reliably.
+ * This prevents runtime errors when children is not a simple string.
+ */
+function toPlainText(node: ReactNode): string {
+  if (node == null) return "";
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+
+  if (Array.isArray(node)) {
+    return node.map(toPlainText).join("");
+  }
+
+  // React element
+  if (React.isValidElement(node)) {
+    return toPlainText((node.props as any)?.children);
+  }
+
+  return "";
 }
 
 function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
@@ -92,7 +113,9 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
     children,
     ...props
   }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
+    const text = toPlainText(children).trim();
+    const slug = slugify(text || `${as}-${Math.random().toString(36).slice(2, 8)}`);
+
     return (
       <HeadingLink marginTop="24" marginBottom="12" as={as} id={slug} {...props}>
         {children}
@@ -128,9 +151,8 @@ function createCodeBlock(props: any) {
   if (props.children && props.children.props && props.children.props.className) {
     const { className, children } = props.children.props;
 
-    // Extract language from className (format: language-xxx)
-    const language = className.replace("language-", "");
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
+    const language = String(className).replace("language-", "");
+    const label = language ? language.charAt(0).toUpperCase() + language.slice(1) : "Code";
 
     return (
       <CodeBlock
@@ -139,7 +161,7 @@ function createCodeBlock(props: any) {
         codes={[
           {
             code: children,
-            language,
+            language: language || "text",
             label,
           },
         ]}
@@ -148,7 +170,6 @@ function createCodeBlock(props: any) {
     );
   }
 
-  // Fallback for other pre tags or empty code blocks
   return <pre {...props} />;
 }
 
