@@ -87,24 +87,12 @@ function slugify(str: string): string {
   }).replace(/\-\-+/g, "-");
 }
 
-/**
- * Convert MDX heading children into plain text reliably.
- * This prevents runtime errors when children is not a simple string.
- */
 function toPlainText(node: ReactNode): string {
   if (node == null) return "";
   if (typeof node === "string") return node;
   if (typeof node === "number") return String(node);
-
-  if (Array.isArray(node)) {
-    return node.map(toPlainText).join("");
-  }
-
-  // React element
-  if (React.isValidElement(node)) {
-    return toPlainText((node.props as any)?.children);
-  }
-
+  if (Array.isArray(node)) return node.map(toPlainText).join("");
+  if (React.isValidElement(node)) return toPlainText((node.props as any)?.children);
   return "";
 }
 
@@ -114,7 +102,7 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
     ...props
   }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
     const text = toPlainText(children).trim();
-    const slug = slugify(text || `${as}-${Math.random().toString(36).slice(2, 8)}`);
+    const slug = slugify(text || as);
 
     return (
       <HeadingLink marginTop="24" marginBottom="12" as={as} id={slug} {...props}>
@@ -124,7 +112,6 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
   };
 
   CustomHeading.displayName = `${as}`;
-
   return CustomHeading;
 }
 
@@ -146,13 +133,13 @@ function createInlineCode({ children }: { children: ReactNode }) {
   return <InlineCode>{children}</InlineCode>;
 }
 
+// For fenced code blocks (```js)
 function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
   if (props.children && props.children.props && props.children.props.className) {
     const { className, children } = props.children.props;
 
-    const language = String(className).replace("language-", "");
-    const label = language ? language.charAt(0).toUpperCase() + language.slice(1) : "Code";
+    const language = String(className).replace("language-", "") || "text";
+    const label = language.charAt(0).toUpperCase() + language.slice(1);
 
     return (
       <CodeBlock
@@ -161,7 +148,7 @@ function createCodeBlock(props: any) {
         codes={[
           {
             code: children,
-            language: language || "text",
+            language,
             label,
           },
         ]}
@@ -171,6 +158,25 @@ function createCodeBlock(props: any) {
   }
 
   return <pre {...props} />;
+}
+
+// ✅ Critical: safe wrapper for <CodeBlock ... /> used directly in MDX
+function SafeCodeBlock(props: any) {
+  const inputCodes = props?.codes;
+
+  const safeCodes = Array.isArray(inputCodes)
+    ? inputCodes
+        .filter(Boolean)
+        .map((c: any) => ({
+          ...c,
+          code: c?.code ?? "",
+          language: typeof c?.language === "string" && c.language.trim() ? c.language : "text",
+          label: typeof c?.label === "string" ? c.label : "",
+        }))
+    : [];
+
+  // Always pass an array to avoid internal undefined access
+  return <CodeBlock {...props} codes={safeCodes} />;
 }
 
 function createList({ children }: { children: ReactNode }) {
@@ -211,7 +217,8 @@ const components = {
   hr: createHR as any,
   Heading,
   Text,
-  CodeBlock,
+  // 🔥 override so MDX <CodeBlock /> uses the safe wrapper
+  CodeBlock: SafeCodeBlock as any,
   InlineCode,
   Accordion,
   AccordionGroup,
