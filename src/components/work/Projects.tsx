@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPosts } from "@/utils/utils";
 import { ProjectCard } from "@/components";
+import VideoPreview from "@/components/work/VideoPreview";
 
 interface ProjectsProps {
   range?: [number, number?];
@@ -25,7 +26,7 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
     ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
     : sorted;
 
-  // COMPACT (related projects) — tu ProjectCard original
+  // COMPACT (related projects)
   if (compact) {
     return (
       <div
@@ -103,7 +104,7 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
         .workTile {
           position: relative;
           width: 100%;
-          aspect-ratio: 16 / 9; /* (Luego lo cambiamos a horizontal tipo Danny) */
+          aspect-ratio: 16 / 9;
           border-radius: 14px;
           overflow: hidden;
           background: rgba(0,0,0,0.06);
@@ -134,7 +135,6 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           box-shadow: 0 14px 42px rgba(0,0,0,0.14);
         }
 
-        /* Hover: blanco y negro + un poco más oscuro para leer texto */
         .workLink:hover .workMedia img,
         .workLink:hover .workMedia video {
           transform: scale(1.03);
@@ -204,11 +204,29 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
                 ? md.previewVideoLow
                 : "";
 
+            const previewVideoHigh =
+              typeof md.previewVideoHigh === "string" && md.previewVideoHigh
+                ? md.previewVideoHigh
+                : "";
+
+            const useVideoPreview =
+              previewType === "video" && previewVideoLow && previewVideoHigh;
+
             return (
-              <Link key={post.slug} href={`/work/${post.slug}`} className="workLink">
+              <Link
+                key={post.slug}
+                href={`/work/${post.slug}`}
+                className="workLink"
+              >
                 <div className="workTile">
                   <div className="workMedia">
-                    {previewType === "video" && previewVideoLow ? (
+                    {useVideoPreview ? (
+                      <VideoPreview
+                        lowSrc={previewVideoLow}
+                        highSrc={previewVideoHigh}
+                        poster={previewImage || undefined}
+                      />
+                    ) : previewType === "video" && previewVideoLow ? (
                       <video
                         src={previewVideoLow}
                         autoPlay
