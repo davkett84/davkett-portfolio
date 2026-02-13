@@ -45,22 +45,26 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     alt: title,
   }));
 
-  // Force a consistent preview ratio for carousels (fixes vertical outlier)
-  // Carousel renders images; we enforce cropping via CSS on the carousel wrapper.
-  const carouselWrapStyle: React.CSSProperties = {
+  // Shared wrapper: locks card previews to a consistent ratio
+  const previewWrapStyle: React.CSSProperties = {
     borderRadius: "16px",
     overflow: "hidden",
     boxShadow: compact
       ? "0 4px 14px rgba(0,0,0,0.15)"
       : "0 10px 32px rgba(0,0,0,0.08)",
     width: "100%",
-    aspectRatio: compact ? "16 / 9" : "16 / 9",
+    aspectRatio: "16 / 9",
+    position: "relative",
+    background: "rgba(0,0,0,0.03)",
   };
 
   ///////////////////////////////////////////////////////////////////////////
   // COMPACT MODE (related projects)
+  // Use a single image (cleaner + avoids Carousel letterboxing issues)
   ///////////////////////////////////////////////////////////////////////////
   if (compact) {
+    const first = carouselItems[0]?.slide;
+
     return (
       <SmartLink
         href={href}
@@ -71,14 +75,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         }}
       >
         <Column fillWidth gap="8" style={{ maxWidth: "260px", cursor: "pointer" }}>
-          {carouselItems.length > 0 && (
-            <div style={carouselWrapStyle}>
-              <Carousel
-                sizes="(max-width: 300px) 100vw, 300px"
-                items={carouselItems}
+          {first && (
+            <div style={previewWrapStyle}>
+              <img
+                src={first}
+                alt={title}
+                loading="lazy"
                 style={{
                   width: "100%",
                   height: "100%",
+                  objectFit: "cover",
+                  display: "block",
                 }}
               />
             </div>
@@ -103,12 +110,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   ///////////////////////////////////////////////////////////////////////////
   // FULL MODE (homepage + Work page)
+  // Keep Carousel; wrap locks ratio for consistency
   ///////////////////////////////////////////////////////////////////////////
 
   return (
     <Column fillWidth gap="m">
       {carouselItems.length > 0 && (
-        <div style={carouselWrapStyle}>
+        <div style={previewWrapStyle}>
           <Carousel
             sizes="(max-width: 960px) 100vw, 960px"
             items={carouselItems}
