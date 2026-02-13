@@ -14,7 +14,7 @@ import React from "react";
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
-  images?: unknown; // <- allow runtime safety
+  images?: unknown; // allow runtime safety
   title: string;
   content: string;
   description: string;
@@ -33,9 +33,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   link,
   compact = false,
 }) => {
-  // ✅ Normalize images so we never call .map on undefined/null/non-array
+  // Normalize images so we never call .map on undefined/null/non-array
   const safeImages: string[] = Array.isArray(images)
-    ? (images.filter((x) => typeof x === "string" && x.trim().length > 0) as string[])
+    ? (images.filter(
+        (x) => typeof x === "string" && x.trim().length > 0
+      ) as string[])
     : [];
 
   const carouselItems = safeImages.map((image) => ({
@@ -43,8 +45,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     alt: title,
   }));
 
+  // Force a consistent preview ratio for carousels (fixes vertical outlier)
+  // Carousel renders images; we enforce cropping via CSS on the carousel wrapper.
+  const carouselWrapStyle: React.CSSProperties = {
+    borderRadius: "16px",
+    overflow: "hidden",
+    boxShadow: compact
+      ? "0 4px 14px rgba(0,0,0,0.15)"
+      : "0 10px 32px rgba(0,0,0,0.08)",
+    width: "100%",
+    aspectRatio: compact ? "16 / 9" : "16 / 9",
+  };
+
   ///////////////////////////////////////////////////////////////////////////
-  // 🔹 COMPACT MODE (for related projects)
+  // COMPACT MODE (related projects)
   ///////////////////////////////////////////////////////////////////////////
   if (compact) {
     return (
@@ -58,15 +72,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       >
         <Column fillWidth gap="8" style={{ maxWidth: "260px", cursor: "pointer" }}>
           {carouselItems.length > 0 && (
-            <Carousel
-              sizes="(max-width: 300px) 100vw, 300px"
-              items={carouselItems}
-              style={{
-                borderRadius: "16px",
-                overflow: "hidden",
-                boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
-              }}
-            />
+            <div style={carouselWrapStyle}>
+              <Carousel
+                sizes="(max-width: 300px) 100vw, 300px"
+                items={carouselItems}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </div>
           )}
 
           <Heading
@@ -87,21 +102,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // 🔹 FULL MODE (used in homepage + Work page)
+  // FULL MODE (homepage + Work page)
   ///////////////////////////////////////////////////////////////////////////
 
   return (
     <Column fillWidth gap="m">
       {carouselItems.length > 0 && (
-        <Carousel
-          sizes="(max-width: 960px) 100vw, 960px"
-          items={carouselItems}
-          style={{
-            borderRadius: "16px",
-            overflow: "hidden",
-            boxShadow: "0 10px 32px rgba(0,0,0,0.08)",
-          }}
-        />
+        <div style={carouselWrapStyle}>
+          <Carousel
+            sizes="(max-width: 960px) 100vw, 960px"
+            items={carouselItems}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
       )}
 
       <Flex
