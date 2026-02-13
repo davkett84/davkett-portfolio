@@ -1,47 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Fade, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
-
-import { routes, display, person, work, gallery } from "@/resources";
+import { routes, display, work, gallery } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
-
-type TimeDisplayProps = {
-  timeZone: string;
-  locale?: string;
-};
-
-const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" }) => {
-  const [currentTime, setCurrentTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      };
-      setCurrentTime(new Intl.DateTimeFormat(locale, options).format(now));
-    };
-
-    updateTime();
-    const intervalId = setInterval(updateTime, 1000);
-    return () => clearInterval(intervalId);
-  }, [timeZone, locale]);
-
-  return <>{currentTime}</>;
-};
 
 export const Header = () => {
   const pathname = usePathname() ?? "";
 
-  // Safe labels (avoid crashing when work/gallery are undefined during prerender/build)
   const workLabel =
     (work as any)?.label ??
     (routes as any)?.["/work"]?.label ??
@@ -56,17 +24,8 @@ export const Header = () => {
 
   return (
     <>
-      <Fade s={{ hide: true }} fillWidth position="fixed" height="80" zIndex={9} />
-      <Fade
-        hide
-        s={{ hide: false }}
-        fillWidth
-        position="fixed"
-        bottom="0"
-        to="top"
-        height="80"
-        zIndex={9}
-      />
+      {/* simple top fade only (no responsive hide) */}
+      <Fade fillWidth position="fixed" height="80" zIndex={9} />
 
       <Row
         fitHeight
@@ -80,11 +39,6 @@ export const Header = () => {
         data-border="rounded"
         s={{ position: "fixed" }}
       >
-        {/* LEFT */}
-        <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Row s={{ hide: true }}>{person.location}</Row>}
-        </Row>
-
         {/* CENTER NAV */}
         <Row fillWidth horizontal="center">
           <Row
@@ -96,7 +50,7 @@ export const Header = () => {
             horizontal="center"
             zIndex={1}
           >
-            <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
+            <Row gap="4" vertical="center" textVariant="body-default-s">
               {/* HOME */}
               {routes["/"] && (
                 <>
@@ -108,63 +62,36 @@ export const Header = () => {
               {/* WORK */}
               {routes["/work"] && (
                 <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="grid"
-                      href="/work"
-                      label={workLabel}
-                      selected={pathname.startsWith("/work")}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="grid"
-                      href="/work"
-                      selected={pathname.startsWith("/work")}
-                    />
-                  </Row>
+                  <ToggleButton
+                    prefixIcon="grid"
+                    href="/work"
+                    label={workLabel}
+                    selected={pathname.startsWith("/work")}
+                  />
                 </>
               )}
 
               {/* GALLERY */}
               {routes["/gallery"] && (
                 <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="gallery"
-                      href="/gallery"
-                      label={galleryLabel}
-                      selected={pathname.startsWith("/gallery")}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="gallery"
-                      href="/gallery"
-                      selected={pathname.startsWith("/gallery")}
-                    />
-                  </Row>
+                  <ToggleButton
+                    prefixIcon="gallery"
+                    href="/gallery"
+                    label={galleryLabel}
+                    selected={pathname.startsWith("/gallery")}
+                  />
                 </>
               )}
 
               {/* CONTACT */}
               {routes["/about"] && (
                 <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      label="Contact"
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
+                  <ToggleButton
+                    prefixIcon="person"
+                    href="/about"
+                    label="Contact"
+                    selected={pathname === "/about"}
+                  />
                 </>
               )}
 
@@ -177,21 +104,6 @@ export const Header = () => {
             </Row>
           </Row>
         </Row>
-
-        {/* RIGHT */}
-        <Flex fillWidth horizontal="end" vertical="center">
-          <Flex
-            paddingRight="12"
-            horizontal="end"
-            vertical="center"
-            textVariant="body-default-s"
-            gap="20"
-          >
-            <Flex s={{ hide: true }}>
-              {display.time && <TimeDisplay timeZone={person.location} />}
-            </Flex>
-          </Flex>
-        </Flex>
       </Row>
     </>
   );

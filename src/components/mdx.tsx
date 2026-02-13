@@ -239,6 +239,6 @@ type CustomMDXProps = MDXRemoteProps & {
   components?: typeof components;
 };
 
-export function CustomMDX(props: CustomMDXProps) {
+export async function CustomMDX(props: CustomMDXProps) {
   return <MDXRemote {...props} components={{ ...components, ...(props.components || {}) }} />;
 }

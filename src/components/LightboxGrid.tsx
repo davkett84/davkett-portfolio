@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Media } from "@once-ui-system/core";
 
 type Props = {
-  images: string[];
+  images?: unknown; // can be array OR JSON string from MDX
   columns?: number;
   gap?: number;
   radius?: "none" | "s" | "m" | "l" | "xl";
@@ -16,24 +15,56 @@ export default function LightboxGrid({
   gap = 24,
   radius = "m",
 }: Props) {
+  // ✅ Support MDX passing images as JSON string
+  let parsedImages: unknown = images;
+
+  if (typeof images === "string") {
+    try {
+      parsedImages = JSON.parse(images);
+    } catch {
+      parsedImages = [];
+    }
+  }
+
+  const safeImages: string[] = Array.isArray(parsedImages)
+    ? (parsedImages.filter((x) => typeof x === "string" && x.trim().length > 0) as string[])
+    : [];
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+    if (activeIndex < 0 || activeIndex >= safeImages.length) setActiveIndex(null);
+  }, [activeIndex, safeImages.length]);
 
   const activeSrc = useMemo(() => {
     if (activeIndex === null) return null;
-    return images[activeIndex] ?? null;
-  }, [activeIndex, images]);
+    return safeImages[activeIndex] ?? null;
+  }, [activeIndex, safeImages]);
 
   const close = () => setActiveIndex(null);
 
   const prev = () => {
     if (activeIndex === null) return;
-    setActiveIndex((i) => (i === 0 ? images.length - 1 : (i ?? 0) - 1));
+    if (safeImages.length === 0) return;
+    setActiveIndex((i) => (i === 0 ? safeImages.length - 1 : (i ?? 0) - 1));
   };
 
   const next = () => {
     if (activeIndex === null) return;
-    setActiveIndex((i) => (i === images.length - 1 ? 0 : (i ?? 0) + 1));
+    if (safeImages.length === 0) return;
+    setActiveIndex((i) => (i === safeImages.length - 1 ? 0 : (i ?? 0) + 1));
   };
+
+  // ✅ Lock body scroll while modal is open
+  useEffect(() => {
+    if (!activeSrc) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [activeSrc]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -45,7 +76,12 @@ export default function LightboxGrid({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex, images.length]);
+  }, [activeIndex, safeImages.length]);
+
+  if (safeImages.length === 0) return null;
+
+  const radiusPx =
+    radius === "none" ? 0 : radius === "s" ? 10 : radius === "m" ? 14 : radius === "l" ? 18 : 22;
 
   return (
     <>
@@ -56,33 +92,45 @@ export default function LightboxGrid({
           gap: `${gap}px`,
         }}
       >
-        {images.map((src, idx) => (
+        {safeImages.map((src, idx) => (
           <button
-            key={src}
+            key={`${src}-${idx}`}
             type="button"
-            onClick={() => setActiveIndex(idx)}
             aria-label="Open image"
-            style={{ all: "unset", cursor: "zoom-in", display: "block" }}
+            onClick={() => setActiveIndex(idx)}
+            style={{
+              appearance: "none",
+              border: "none",
+              padding: 0,
+              margin: 0,
+              background: "transparent",
+              cursor: "zoom-in",
+              display: "block",
+              width: "100%",
+              textAlign: "left",
+              WebkitTapHighlightColor: "transparent",
+            }}
           >
-           <div
-  style={{
-    width: "100%",
-    aspectRatio: "4 / 5", // 👈 elige el ratio
-    overflow: "hidden",
-    borderRadius: "12px",
-  }}
->
-  <Media
-    src={src}
-    radius="none"
-    style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    }}
-  />
-</div>
-
+            <div
+              style={{
+                width: "100%",
+                aspectRatio: "4 / 5",
+                overflow: "hidden",
+                borderRadius: radiusPx,
+              }}
+            >
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+              />
+            </div>
           </button>
         ))}
       </div>
@@ -91,7 +139,7 @@ export default function LightboxGrid({
         <div
           role="dialog"
           aria-modal="true"
-          onClick={close}
+          onMouseDown={close}
           style={{
             position: "fixed",
             inset: 0,
@@ -104,7 +152,7 @@ export default function LightboxGrid({
           }}
         >
           <div
-            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
             style={{
               position: "relative",
               width: "min(1200px, 100%)",
@@ -113,7 +161,11 @@ export default function LightboxGrid({
           >
             <button
               type="button"
-              onClick={close}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                close();
+              }}
               aria-label="Close"
               style={{
                 position: "absolute",
@@ -133,7 +185,11 @@ export default function LightboxGrid({
 
             <button
               type="button"
-              onClick={prev}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                prev();
+              }}
               aria-label="Previous"
               style={{
                 position: "absolute",
@@ -154,7 +210,11 @@ export default function LightboxGrid({
 
             <button
               type="button"
-              onClick={next}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                next();
+              }}
               aria-label="Next"
               style={{
                 position: "absolute",
@@ -174,30 +234,30 @@ export default function LightboxGrid({
             </button>
 
             <div
-  style={{
-    width: "100%",
-    maxHeight: "90vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "16px",
-    overflow: "hidden",
-    background: "rgba(0,0,0,0.15)",
-  }}
->
-  <img
-    src={activeSrc}
-    alt=""
-    style={{
-      width: "100%",
-      height: "auto",
-      maxHeight: "90vh",
-      objectFit: "contain",
-      display: "block",
-    }}
-  />
-</div>
-
+              style={{
+                width: "100%",
+                maxHeight: "90vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 18,
+                overflow: "hidden",
+                background: "rgba(0,0,0,0.15)",
+              }}
+            >
+              <img
+                src={activeSrc}
+                alt=""
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "90vh",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

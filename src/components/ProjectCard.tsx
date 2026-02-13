@@ -14,7 +14,7 @@ import React from "react";
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
-  images: string[];
+  images?: unknown; // <- allow runtime safety
   title: string;
   content: string;
   description: string;
@@ -25,7 +25,7 @@ interface ProjectCardProps {
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
-  images = [],
+  images,
   title,
   content,
   description,
@@ -33,6 +33,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   link,
   compact = false,
 }) => {
+  // ✅ Normalize images so we never call .map on undefined/null/non-array
+  const safeImages: string[] = Array.isArray(images)
+    ? (images.filter((x) => typeof x === "string" && x.trim().length > 0) as string[])
+    : [];
+
+  const carouselItems = safeImages.map((image) => ({
+    slide: image,
+    alt: title,
+  }));
 
   ///////////////////////////////////////////////////////////////////////////
   // 🔹 COMPACT MODE (for related projects)
@@ -48,18 +57,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         }}
       >
         <Column fillWidth gap="8" style={{ maxWidth: "260px", cursor: "pointer" }}>
-          <Carousel
-            sizes="(max-width: 300px) 100vw, 300px"
-            items={images.map((image) => ({
-              slide: image,
-              alt: title,
-            }))}
-            style={{
-              borderRadius: "16px",
-              overflow: "hidden",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
-            }}
-          />
+          {carouselItems.length > 0 && (
+            <Carousel
+              sizes="(max-width: 300px) 100vw, 300px"
+              items={carouselItems}
+              style={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+              }}
+            />
+          )}
 
           <Heading
             as="h3"
@@ -84,18 +92,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <Column fillWidth gap="m">
-      <Carousel
-        sizes="(max-width: 960px) 100vw, 960px"
-        items={images.map((image) => ({
-          slide: image,
-          alt: title,
-        }))}
-        style={{
-          borderRadius: "16px",
-          overflow: "hidden",
-          boxShadow: "0 10px 32px rgba(0,0,0,0.08)",
-        }}
-      />
+      {carouselItems.length > 0 && (
+        <Carousel
+          sizes="(max-width: 960px) 100vw, 960px"
+          items={carouselItems}
+          style={{
+            borderRadius: "16px",
+            overflow: "hidden",
+            boxShadow: "0 10px 32px rgba(0,0,0,0.08)",
+          }}
+        />
+      )}
 
       <Flex
         s={{ direction: "column" }}
