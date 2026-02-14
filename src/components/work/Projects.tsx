@@ -16,11 +16,22 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
     allProjects = allProjects.filter((p) => !exclude.includes(p.slug));
   }
 
-  const sorted = allProjects.sort(
-    (a, b) =>
-      new Date(b.metadata.publishedAt).getTime() -
-      new Date(a.metadata.publishedAt).getTime()
+  const sorted = allProjects.sort((a, b) => {
+  const aIsVideo = a.metadata.previewType === "video" ? 1 : 0;
+  const bIsVideo = b.metadata.previewType === "video" ? 1 : 0;
+
+  // Primero ordenar por video (videos arriba)
+  if (bIsVideo !== aIsVideo) {
+    return bIsVideo - aIsVideo;
+  }
+
+  // Luego ordenar por fecha (más reciente primero)
+  return (
+    new Date(b.metadata.publishedAt).getTime() -
+    new Date(a.metadata.publishedAt).getTime()
   );
+});
+
 
   const displayed = range
     ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
