@@ -6,11 +6,11 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "commercial";
 
-// 🔒 CORTE EXACTO
 const PORTRAITS_COUNT = 5;
 
 export default function GalleryView() {
-  const [activeCategory, setActiveCategory] = useState<Category>("portraits");
+  const [activeCategory, setActiveCategory] =
+    useState<Category>("portraits");
 
   const filteredImages = gallery.images.filter((_, index) => {
     if (activeCategory === "portraits") return index < PORTRAITS_COUNT;
@@ -21,22 +21,32 @@ export default function GalleryView() {
     <>
       <style>{`
         .gallery-wrapper { display: flex; width: 100%; }
-        .gallery-filter { min-width: 180px; margin-right: 56px; margin-top: 12px; }
+        .gallery-filter { 
+          min-width: 180px; 
+          margin-right: 56px; 
+          margin-top: 12px;
+        }
 
         @media (max-width: 768px) {
-          .gallery-wrapper { flex-direction: column; align-items: center; }
+          .gallery-wrapper { 
+            flex-direction: column; 
+            align-items: center; 
+          }
           .gallery-filter {
             display: flex;
             gap: 32px;
             margin: 0 0 24px 0;
             min-width: auto;
           }
-          .gallery-filter-item { text-align: center; }
+          .gallery-filter-item { 
+            text-align: center; 
+          }
         }
       `}</style>
 
       <div className="gallery-wrapper">
         <div className="gallery-filter">
+          
           {/* PORTRAITS */}
           <div
             className="gallery-filter-item"
@@ -44,7 +54,9 @@ export default function GalleryView() {
             style={{ cursor: "pointer", marginBottom: 16 }}
           >
             <Text
+              size="m"
               style={{
+                fontFamily: "inherit",
                 fontWeight: activeCategory === "portraits" ? 600 : 400,
                 opacity: activeCategory === "portraits" ? 1 : 0.45,
                 letterSpacing: "0.04em",
@@ -52,6 +64,7 @@ export default function GalleryView() {
             >
               Portraits
             </Text>
+
             {activeCategory === "portraits" && (
               <div
                 style={{
@@ -72,7 +85,9 @@ export default function GalleryView() {
             style={{ cursor: "pointer" }}
           >
             <Text
+              size="m"
               style={{
+                fontFamily: "inherit",
                 fontWeight: activeCategory === "commercial" ? 600 : 400,
                 opacity: activeCategory === "commercial" ? 1 : 0.45,
                 letterSpacing: "0.04em",
@@ -80,6 +95,7 @@ export default function GalleryView() {
             >
               Commercial
             </Text>
+
             {activeCategory === "commercial" && (
               <div
                 style={{
@@ -102,7 +118,11 @@ export default function GalleryView() {
               priority={index < 10}
               sizes="(max-width: 560px) 100vw, 50vw"
               radius="m"
-              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
+              aspectRatio={
+                image.orientation === "horizontal"
+                  ? "16 / 9"
+                  : "3 / 4"
+              }
               src={image.src}
               alt={image.alt}
             />
