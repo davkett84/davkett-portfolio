@@ -6,11 +6,11 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "commercial";
 
-// 🔒 CORTE EXACTO
 const PORTRAITS_COUNT = 5;
 
 export default function GalleryView() {
-  const [activeCategory, setActiveCategory] = useState<Category>("portraits");
+  const [activeCategory, setActiveCategory] =
+    useState<Category>("portraits");
 
   const filteredImages = gallery.images.filter((_, index) => {
     if (activeCategory === "portraits") return index < PORTRAITS_COUNT;
@@ -20,10 +20,22 @@ export default function GalleryView() {
   return (
     <>
       <style>{`
-        .gallery-wrapper { display: flex; width: 100%; }
-        .gallery-filter { min-width: 180px; margin-right: 56px; margin-top: 12px; }
+        .gallery-wrapper {
+          display: flex;
+          width: 100%;
+          position: relative;
+          z-index: 2;
+        }
 
-        /* Buttons reset + typography lock (fix iOS / theme drift) */
+        .gallery-filter {
+          min-width: 180px;
+          margin-right: 56px;
+          margin-top: 12px;
+          position: relative;
+          z-index: 3;
+        }
+
+        /* Buttons reset */
         .gallery-filter-btn {
           appearance: none;
           -webkit-appearance: none;
@@ -34,7 +46,6 @@ export default function GalleryView() {
           cursor: pointer;
           text-align: left;
 
-          /* FORCE SANS */
           font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial);
           font-size: 14px;
           line-height: 1.2;
@@ -44,13 +55,18 @@ export default function GalleryView() {
           -webkit-tap-highlight-color: transparent;
         }
 
-        .gallery-filter-item { margin-bottom: 16px; }
-        .gallery-filter-item:last-child { margin-bottom: 0; }
+        .gallery-filter-item {
+          margin-bottom: 16px;
+        }
+
+        .gallery-filter-item:last-child {
+          margin-bottom: 0;
+        }
 
         .gallery-filter-label {
           display: inline-block;
           font-weight: 400;
-          opacity: 0.7; /* not too washed out */
+          opacity: 0.7;
         }
 
         .gallery-filter-label.is-active {
@@ -66,33 +82,61 @@ export default function GalleryView() {
           opacity: 0.65;
         }
 
+        /* MOBILE */
         @media (max-width: 768px) {
-          .gallery-wrapper { flex-direction: column; align-items: center; }
-          .gallery-filter {
-            display: flex;
-            gap: 32px;
-            margin: 0 0 24px 0;
-            min-width: auto;
-            justify-content: center;
+          .gallery-wrapper {
+            flex-direction: column;
             align-items: center;
           }
 
-          .gallery-filter-item { margin-bottom: 0; text-align: center; }
+          .gallery-filter {
+            display: inline-flex;
+            gap: 32px;
+            margin: 10px 0 24px 0;
+            min-width: auto;
+            justify-content: center;
+            align-items: center;
 
-          .gallery-filter-btn { text-align: center; }
-          .gallery-filter-underline { margin-left: auto; margin-right: auto; }
+            position: sticky;
+            top: 10px;
+            z-index: 50;
+
+            padding: 10px 16px;
+            border-radius: 999px;
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            color: rgba(255, 255, 255, 0.95);
+          }
+
+          .gallery-filter-item {
+            margin-bottom: 0;
+            text-align: center;
+          }
+
+          .gallery-filter-btn {
+            text-align: center;
+          }
+
+          .gallery-filter-underline {
+            margin-left: auto;
+            margin-right: auto;
+          }
         }
       `}</style>
 
       <div className="gallery-wrapper">
         <div className="gallery-filter">
+
           {/* PORTRAITS */}
           <div className="gallery-filter-item">
             <button
               type="button"
               className="gallery-filter-btn"
               onClick={() => setActiveCategory("portraits")}
-              aria-pressed={activeCategory === "portraits"}
             >
               <span
                 className={
@@ -115,7 +159,6 @@ export default function GalleryView() {
               type="button"
               className="gallery-filter-btn"
               onClick={() => setActiveCategory("commercial")}
-              aria-pressed={activeCategory === "commercial"}
             >
               <span
                 className={
@@ -131,6 +174,7 @@ export default function GalleryView() {
               )}
             </button>
           </div>
+
         </div>
 
         <MasonryGrid columns={2} s={{ columns: 1 }}>
@@ -141,7 +185,11 @@ export default function GalleryView() {
               priority={index < 10}
               sizes="(max-width: 560px) 100vw, 50vw"
               radius="m"
-              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
+              aspectRatio={
+                image.orientation === "horizontal"
+                  ? "16 / 9"
+                  : "3 / 4"
+              }
               src={image.src}
               alt={image.alt}
             />
