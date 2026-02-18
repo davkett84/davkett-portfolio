@@ -77,23 +77,23 @@ export default function GalleryView() {
             align-items: center;
           }
 
-          /* Spacer so the fixed pill never covers the first image */
-          .gallery-top-spacer {
-            height: calc(env(safe-area-inset-top, 0px) + 74px);
+          /* ✅ reserve space so the pill never covers the first image */
+          .gallery-grid-wrap {
             width: 100%;
+            padding-top: 54px; /* space for pill */
           }
 
           .gallery-filter {
             display: inline-flex;
             gap: 32px;
+            margin: 10px 0 0 0;
             min-width: auto;
             justify-content: center;
             align-items: center;
 
-            position: fixed;
-            left: 50%;
-            transform: translateX(-50%);
-            top: calc(env(safe-area-inset-top, 0px) + 10px);
+            position: sticky;
+            /* ✅ higher = less overlap with photo, lower = more */
+            top: 54px;
 
             z-index: 99999;
             pointer-events: auto;
@@ -107,6 +107,7 @@ export default function GalleryView() {
             border: 1px solid rgba(255, 255, 255, 0.12);
 
             color: rgba(255, 255, 255, 0.95);
+            transform: translateZ(0);
           }
 
           .gallery-filter-item { margin-bottom: 0; text-align: center; }
@@ -116,9 +117,6 @@ export default function GalleryView() {
       `}</style>
 
       <div className="gallery-wrapper">
-        {/* Only has effect on mobile because of CSS */}
-        <div className="gallery-top-spacer" />
-
         <div className="gallery-filter">
           <div className="gallery-filter-item">
             <button
@@ -163,20 +161,22 @@ export default function GalleryView() {
           </div>
         </div>
 
-        <MasonryGrid columns={2} s={{ columns: 1 }}>
-          {filteredImages.map((image, index) => (
-            <Media
-              key={index}
-              enlarge
-              priority={index < 10}
-              sizes="(max-width: 560px) 100vw, 50vw"
-              radius="m"
-              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
-              src={image.src}
-              alt={image.alt}
-            />
-          ))}
-        </MasonryGrid>
+        <div className="gallery-grid-wrap">
+          <MasonryGrid columns={2} s={{ columns: 1 }}>
+            {filteredImages.map((image, index) => (
+              <Media
+                key={index}
+                enlarge
+                priority={index < 10}
+                sizes="(max-width: 560px) 100vw, 50vw"
+                radius="m"
+                aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
+                src={image.src}
+                alt={image.alt}
+              />
+            ))}
+          </MasonryGrid>
+        </div>
       </div>
     </>
   );
