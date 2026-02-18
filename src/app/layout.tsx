@@ -19,7 +19,11 @@ export async function generateMetadata() {
   });
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -78,7 +82,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             --gradient-end: rgba(0, 0, 0, 0);
           }
 
-          /* ✅ Gradient background that never blocks taps */
           body {
             position: relative;
             background: transparent;
@@ -112,29 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{ margin: 0 }}
       >
         <Providers>
-          <ClientShell>
-            {children}
-
-            {/* ✅ TAP TEST (must be inside body) */}
-            <button
-              type="button"
-              onPointerDown={() => alert("tap ok")}
-              style={{
-                position: "fixed",
-                top: 10,
-                right: 10,
-                zIndex: 2147483647,
-                padding: "10px 12px",
-                borderRadius: 999,
-                border: "1px solid rgba(255,255,255,0.2)",
-                background: "rgba(0,0,0,0.6)",
-                color: "white",
-                fontSize: 14,
-              }}
-            >
-              TAP TEST
-            </button>
-          </ClientShell>
+          <ClientShell>{children}</ClientShell>
         </Providers>
       </body>
     </html>
