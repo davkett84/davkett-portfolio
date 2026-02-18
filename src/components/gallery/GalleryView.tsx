@@ -9,8 +9,7 @@ type Category = "portraits" | "commercial";
 const PORTRAITS_COUNT = 5;
 
 export default function GalleryView() {
-  const [activeCategory, setActiveCategory] =
-    useState<Category>("portraits");
+  const [activeCategory, setActiveCategory] = useState<Category>("portraits");
 
   const filteredImages = gallery.images.filter((_, index) => {
     if (activeCategory === "portraits") return index < PORTRAITS_COUNT;
@@ -20,11 +19,13 @@ export default function GalleryView() {
   return (
     <>
       <style>{`
+        /* Create an isolated stacking context so our sticky pill can sit above page overlays */
         .gallery-wrapper {
           display: flex;
           width: 100%;
           position: relative;
-          z-index: 2;
+          isolation: isolate;
+          z-index: 1;
         }
 
         .gallery-filter {
@@ -32,10 +33,9 @@ export default function GalleryView() {
           margin-right: 56px;
           margin-top: 12px;
           position: relative;
-          z-index: 3;
+          z-index: 2;
         }
 
-        /* Buttons reset */
         .gallery-filter-btn {
           appearance: none;
           -webkit-appearance: none;
@@ -53,15 +53,12 @@ export default function GalleryView() {
 
           color: inherit;
           -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          pointer-events: auto;
         }
 
-        .gallery-filter-item {
-          margin-bottom: 16px;
-        }
-
-        .gallery-filter-item:last-child {
-          margin-bottom: 0;
-        }
+        .gallery-filter-item { margin-bottom: 16px; }
+        .gallery-filter-item:last-child { margin-bottom: 0; }
 
         .gallery-filter-label {
           display: inline-block;
@@ -82,13 +79,10 @@ export default function GalleryView() {
           opacity: 0.65;
         }
 
-        /* MOBILE */
         @media (max-width: 768px) {
-          .gallery-wrapper {
-            flex-direction: column;
-            align-items: center;
-          }
+          .gallery-wrapper { flex-direction: column; align-items: center; }
 
+          /* IMPORTANT: make it clickable even if a global overlay sits above */
           .gallery-filter {
             display: inline-flex;
             gap: 32px;
@@ -99,7 +93,10 @@ export default function GalleryView() {
 
             position: sticky;
             top: 10px;
-            z-index: 50;
+
+            /* GO ABOVE EVERYTHING */
+            z-index: 99999;
+            pointer-events: auto;
 
             padding: 10px 16px;
             border-radius: 999px;
@@ -110,33 +107,25 @@ export default function GalleryView() {
             border: 1px solid rgba(255, 255, 255, 0.12);
 
             color: rgba(255, 255, 255, 0.95);
+
+            /* Sometimes iOS overlays create weird stacking; this helps */
+            transform: translateZ(0);
           }
 
-          .gallery-filter-item {
-            margin-bottom: 0;
-            text-align: center;
-          }
-
-          .gallery-filter-btn {
-            text-align: center;
-          }
-
-          .gallery-filter-underline {
-            margin-left: auto;
-            margin-right: auto;
-          }
+          .gallery-filter-item { margin-bottom: 0; text-align: center; }
+          .gallery-filter-btn { text-align: center; }
+          .gallery-filter-underline { margin-left: auto; margin-right: auto; }
         }
       `}</style>
 
       <div className="gallery-wrapper">
         <div className="gallery-filter">
-
-          {/* PORTRAITS */}
           <div className="gallery-filter-item">
             <button
               type="button"
               className="gallery-filter-btn"
               onClick={() => setActiveCategory("portraits")}
+              aria-pressed={activeCategory === "portraits"}
             >
               <span
                 className={
@@ -146,19 +135,18 @@ export default function GalleryView() {
               >
                 Portraits
               </span>
-
               {activeCategory === "portraits" && (
                 <div className="gallery-filter-underline" />
               )}
             </button>
           </div>
 
-          {/* COMMERCIAL */}
           <div className="gallery-filter-item">
             <button
               type="button"
               className="gallery-filter-btn"
               onClick={() => setActiveCategory("commercial")}
+              aria-pressed={activeCategory === "commercial"}
             >
               <span
                 className={
@@ -168,13 +156,11 @@ export default function GalleryView() {
               >
                 Commercial
               </span>
-
               {activeCategory === "commercial" && (
                 <div className="gallery-filter-underline" />
               )}
             </button>
           </div>
-
         </div>
 
         <MasonryGrid columns={2} s={{ columns: 1 }}>
@@ -185,11 +171,7 @@ export default function GalleryView() {
               priority={index < 10}
               sizes="(max-width: 560px) 100vw, 50vw"
               radius="m"
-              aspectRatio={
-                image.orientation === "horizontal"
-                  ? "16 / 9"
-                  : "3 / 4"
-              }
+              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
               src={image.src}
               alt={image.alt}
             />
