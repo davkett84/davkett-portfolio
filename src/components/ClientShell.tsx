@@ -1,118 +1,168 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-  Background,
-  Column,
-  Flex,
-  RevealFx,
-  SpacingToken,
-} from "@once-ui-system/core";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { effects } from "@/resources";
+import { useState } from "react";
+import { Media, MasonryGrid } from "@once-ui-system/core";
+import { gallery } from "@/resources";
 
-export default function ClientShell({ children }: { children: React.ReactNode }) {
-  const [isMobile, setIsMobile] = useState(false);
+type Category = "portraits" | "commercial";
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
+const PORTRAITS_COUNT = 5;
 
-    const apply = () => setIsMobile(mq.matches);
-    apply();
+export default function GalleryView() {
+  const [activeCategory, setActiveCategory] = useState<Category>("portraits");
 
-    // Safari iOS: addEventListener may fail on older versions
-    if (mq.addEventListener) mq.addEventListener("change", apply);
-    else mq.addListener(apply);
+  const filteredImages = gallery.images.filter((_, index) => {
+    if (activeCategory === "portraits") return index < PORTRAITS_COUNT;
+    return index >= PORTRAITS_COUNT;
+  });
 
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener("change", apply);
-      else mq.removeListener(apply);
-    };
-  }, []);
+  const setCategory = (cat: Category) => setActiveCategory(cat);
 
   return (
-    <Column
-      background="page"
-      fillWidth
-      style={{ minHeight: "100vh", position: "relative" }}
-      margin="0"
-      padding="0"
-      horizontal="center"
-      suppressHydrationWarning
-    >
-      {/* Background layer */}
-      {isMobile ? (
-        // MOBILE: CSS gradient only (never blocks taps)
-        <div
-          aria-hidden="true"
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 0,
-            pointerEvents: "none",
-            background:
-              "radial-gradient(1200px 700px at 50% 0%, var(--gradient-start), var(--gradient-end))",
-          }}
-        />
-      ) : (
-        // DESKTOP: Once UI background (keeps effects)
-        <RevealFx
-          fill
-          position="absolute"
-          style={{ pointerEvents: "none", zIndex: 0 }}
-        >
-          <Background
-            mask={{
-              x: effects.mask.x,
-              y: effects.mask.y,
-              radius: effects.mask.radius,
-              cursor: effects.mask.cursor,
-            }}
-            gradient={{
-              display: true,
-              x: 50,
-              y: 0,
-              width: 160,
-              height: 160,
-              tilt: 0,
-              colorStart: "var(--gradient-start)",
-              colorEnd: "var(--gradient-end)",
-            }}
-            dots={{
-              display: effects.dots.display,
-              size: effects.dots.size as SpacingToken,
-              color: effects.dots.color,
-            }}
-            grid={{
-              display: effects.grid.display,
-              color: effects.grid.color,
-              width: effects.grid.width,
-              height: effects.grid.height,
-            }}
-            lines={{
-              display: effects.lines.display,
-              size: effects.lines.size as SpacingToken,
-              thickness: effects.lines.thickness,
-              angle: effects.lines.angle,
-              color: effects.lines.color,
-            }}
-          />
-        </RevealFx>
-      )}
+    <>
+      <style>{`
+        .gallery-wrapper { display: flex; width: 100%; position: relative; }
+        .gallery-filter { min-width: 180px; margin-right: 56px; margin-top: 12px; position: relative; z-index: 2; }
 
-      {/* Content layer */}
-      <Column fillWidth style={{ position: "relative", zIndex: 1 }} horizontal="center">
-        <Header />
+        .gallery-filter-btn {
+          appearance: none;
+          -webkit-appearance: none;
+          border: 0;
+          background: transparent;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
+          text-align: left;
 
-        <Flex fillWidth padding="l" horizontal="center" flex={1}>
-          <Flex horizontal="center" fillWidth minHeight="0">
-            {children}
-          </Flex>
-        </Flex>
+          font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial);
+          font-size: 14px;
+          line-height: 1.2;
+          letter-spacing: 0.04em;
 
-        <Footer />
-      </Column>
-    </Column>
+          color: inherit;
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+          pointer-events: auto;
+        }
+
+        .gallery-filter-item { margin-bottom: 16px; }
+        .gallery-filter-item:last-child { margin-bottom: 0; }
+
+        .gallery-filter-label { display: inline-block; font-weight: 400; opacity: 0.7; }
+        .gallery-filter-label.is-active { font-weight: 600; opacity: 1; }
+
+        .gallery-filter-underline {
+          height: 1px;
+          width: 28px;
+          background: currentColor;
+          margin-top: 6px;
+          opacity: 0.65;
+        }
+
+        @media (max-width: 768px) {
+          .gallery-wrapper { flex-direction: column; align-items: center; }
+
+          /* FIXED > STICKY (more reliable on iOS) */
+          .gallery-filter {
+            display: inline-flex;
+            gap: 32px;
+            min-width: auto;
+            justify-content: center;
+            align-items: center;
+
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            top: calc(env(safe-area-inset-top, 0px) + 12px);
+
+            z-index: 999999;
+            pointer-events: auto;
+
+            padding: 10px 16px;
+            border-radius: 999px;
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            color: rgba(255, 255, 255, 0.95);
+          }
+
+          .gallery-filter-item { margin-bottom: 0; text-align: center; }
+          .gallery-filter-btn { text-align: center; }
+          .gallery-filter-underline { margin-left: auto; margin-right: auto; }
+
+          /* Give space so fixed pill doesn't overlap content */
+          .gallery-spacer { height: 64px; width: 100%; }
+        }
+      `}</style>
+
+      <div className="gallery-wrapper">
+        {/* spacer only matters on mobile */}
+        <div className="gallery-spacer" />
+
+        <div className="gallery-filter">
+          <div className="gallery-filter-item">
+            <button
+              type="button"
+              className="gallery-filter-btn"
+              onPointerDown={() => setCategory("portraits")}
+              onClick={() => setCategory("portraits")}
+              aria-pressed={activeCategory === "portraits"}
+            >
+              <span
+                className={
+                  "gallery-filter-label" +
+                  (activeCategory === "portraits" ? " is-active" : "")
+                }
+              >
+                Portraits
+              </span>
+              {activeCategory === "portraits" && (
+                <div className="gallery-filter-underline" />
+              )}
+            </button>
+          </div>
+
+          <div className="gallery-filter-item">
+            <button
+              type="button"
+              className="gallery-filter-btn"
+              onPointerDown={() => setCategory("commercial")}
+              onClick={() => setCategory("commercial")}
+              aria-pressed={activeCategory === "commercial"}
+            >
+              <span
+                className={
+                  "gallery-filter-label" +
+                  (activeCategory === "commercial" ? " is-active" : "")
+                }
+              >
+                Commercial
+              </span>
+              {activeCategory === "commercial" && (
+                <div className="gallery-filter-underline" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        <MasonryGrid columns={2} s={{ columns: 1 }}>
+          {filteredImages.map((image, index) => (
+            <Media
+              key={index}
+              enlarge
+              priority={index < 10}
+              sizes="(max-width: 560px) 100vw, 50vw"
+              radius="m"
+              aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
+              src={image.src}
+              alt={image.alt}
+            />
+          ))}
+        </MasonryGrid>
+      </div>
+    </>
   );
 }
