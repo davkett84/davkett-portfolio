@@ -4,12 +4,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * HOME GALLERY
- * /public/images/home/Home00001.jpg → Home00027.jpg
+ * /public/images/home/Home00001.webp → Home00027.webp
  */
 const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
   const n = String(i + 1).padStart(5, "0");
   return {
-    src: `/images/home/Home${n}.jpg`,
+    src: `/images/home/Home${n}.webp`,
     alt: `Home gallery image ${n}`,
   };
 });
