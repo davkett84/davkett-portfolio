@@ -59,16 +59,8 @@ export default function GalleryView() {
         .gallery-filter-item { margin-bottom: 16px; }
         .gallery-filter-item:last-child { margin-bottom: 0; }
 
-        .gallery-filter-label {
-          display: inline-block;
-          font-weight: 400;
-          opacity: 0.7;
-        }
-
-        .gallery-filter-label.is-active {
-          font-weight: 600;
-          opacity: 1;
-        }
+        .gallery-filter-label { display: inline-block; font-weight: 400; opacity: 0.7; }
+        .gallery-filter-label.is-active { font-weight: 600; opacity: 1; }
 
         .gallery-filter-underline {
           height: 1px;
@@ -78,21 +70,30 @@ export default function GalleryView() {
           opacity: 0.65;
         }
 
+        /* MOBILE */
         @media (max-width: 768px) {
-          .gallery-wrapper { flex-direction: column; align-items: center; }
+          .gallery-wrapper {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          /* Spacer so the fixed pill never covers the first image */
+          .gallery-top-spacer {
+            height: calc(env(safe-area-inset-top, 0px) + 74px);
+            width: 100%;
+          }
 
           .gallery-filter {
             display: inline-flex;
             gap: 32px;
-            margin: 10px 0 24px 0;
             min-width: auto;
             justify-content: center;
             align-items: center;
 
-            position: sticky;
-
-            /* ✅ move below header to avoid invisible overlay blocking taps */
-            top: 72px;
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            top: calc(env(safe-area-inset-top, 0px) + 10px);
 
             z-index: 99999;
             pointer-events: auto;
@@ -106,7 +107,6 @@ export default function GalleryView() {
             border: 1px solid rgba(255, 255, 255, 0.12);
 
             color: rgba(255, 255, 255, 0.95);
-            transform: translateZ(0);
           }
 
           .gallery-filter-item { margin-bottom: 0; text-align: center; }
@@ -116,6 +116,9 @@ export default function GalleryView() {
       `}</style>
 
       <div className="gallery-wrapper">
+        {/* Only has effect on mobile because of CSS */}
+        <div className="gallery-top-spacer" />
+
         <div className="gallery-filter">
           <div className="gallery-filter-item">
             <button
