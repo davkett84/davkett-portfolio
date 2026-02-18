@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { Background, Column, Flex, RevealFx, SpacingToken } from "@once-ui-system/core";
+import {
+  Background,
+  Column,
+  Flex,
+  RevealFx,
+  SpacingToken,
+} from "@once-ui-system/core";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { effects } from "@/resources";
@@ -11,15 +17,29 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     <Column
       background="page"
       fillWidth
-      style={{ minHeight: "100vh", position: "relative" }}
+      style={{
+        minHeight: "100vh",
+        position: "relative",
+        zIndex: 0,
+      }}
       margin="0"
       padding="0"
       horizontal="center"
       suppressHydrationWarning
     >
-      {/* Background layer */}
-      <RevealFx fill position="absolute" style={{ pointerEvents: "none", zIndex: 0 }}>
+      {/* Background layer (fixed + non-interactive) */}
+      <RevealFx
+        fill
+        position="fixed"
+        style={{
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      >
         <Background
+          // Extra safety for iOS hit-testing
+          style={{ pointerEvents: "none" }}
           mask={{
             x: effects.mask.x,
             y: effects.mask.y,
@@ -58,7 +78,14 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       </RevealFx>
 
       {/* Content layer */}
-      <Column fillWidth style={{ position: "relative", zIndex: 1 }} horizontal="center">
+      <Column
+        fillWidth
+        style={{
+          position: "relative",
+          zIndex: 1,
+        }}
+        horizontal="center"
+      >
         <Header />
 
         <Flex fillWidth padding="l" horizontal="center" flex={1}>
