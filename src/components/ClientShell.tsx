@@ -1,12 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Background, Column, Flex, SpacingToken } from "@once-ui-system/core";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { effects } from "@/resources";
 
+function useIsMobile(breakpointPx = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpointPx}px)`);
+    const update = () => setIsMobile(mq.matches);
+
+    update();
+    // Safari compat
+    if (mq.addEventListener) mq.addEventListener("change", update);
+    else mq.addListener(update);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", update);
+      else mq.removeListener(update);
+    };
+  }, [breakpointPx]);
+
+  return isMobile;
+}
+
 export default function ClientShell({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile(768);
+
   return (
     <Column
       background="page"
@@ -14,68 +37,73 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       style={{
         minHeight: "100vh",
         position: "relative",
-        isolation: "isolate", // key: creates a safe stacking context
         overflowX: "hidden",
+        isolation: "isolate",
       }}
       margin="0"
       padding="0"
       horizontal="center"
       suppressHydrationWarning
     >
-      {/* Background: fixed, behind everything, never blocks taps */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: -1, // force behind content
-          pointerEvents: "none", // never capture taps/clicks
-        }}
-      >
-        <Background
-          mask={{
-            x: effects.mask.x,
-            y: effects.mask.y,
-            radius: effects.mask.radius,
-            cursor: effects.mask.cursor,
+      {/* Background layer
+          - Desktop: Once UI Background (nice)
+          - Mobile: OFF because it breaks taps in iOS
+      */}
+      {!isMobile && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
           }}
-          gradient={{
-            display: true,
-            x: 50,
-            y: 0,
-            width: 160,
-            height: 160,
-            tilt: 0,
-            colorStart: "var(--gradient-start)",
-            colorEnd: "var(--gradient-end)",
-          }}
-          dots={{
-            display: effects.dots.display,
-            size: effects.dots.size as SpacingToken,
-            color: effects.dots.color,
-          }}
-          grid={{
-            display: effects.grid.display,
-            color: effects.grid.color,
-            width: effects.grid.width,
-            height: effects.grid.height,
-          }}
-          lines={{
-            display: effects.lines.display,
-            size: effects.lines.size as SpacingToken,
-            thickness: effects.lines.thickness,
-            angle: effects.lines.angle,
-            color: effects.lines.color,
-          }}
-        />
-      </div>
+        >
+          <Background
+            mask={{
+              x: effects.mask.x,
+              y: effects.mask.y,
+              radius: effects.mask.radius,
+              cursor: effects.mask.cursor,
+            }}
+            gradient={{
+              display: true,
+              x: 50,
+              y: 0,
+              width: 160,
+              height: 160,
+              tilt: 0,
+              colorStart: "var(--gradient-start)",
+              colorEnd: "var(--gradient-end)",
+            }}
+            dots={{
+              display: effects.dots.display,
+              size: effects.dots.size as SpacingToken,
+              color: effects.dots.color,
+            }}
+            grid={{
+              display: effects.grid.display,
+              color: effects.grid.color,
+              width: effects.grid.width,
+              height: effects.grid.height,
+            }}
+            lines={{
+              display: effects.lines.display,
+              size: effects.lines.size as SpacingToken,
+              thickness: effects.lines.thickness,
+              angle: effects.lines.angle,
+              color: effects.lines.color,
+            }}
+          />
+        </div>
+      )}
 
-      {/* Content: guaranteed interactive */}
+      {/* Content layer (always interactive) */}
       <Column
         fillWidth
         style={{
           position: "relative",
-          zIndex: 0,
+          zIndex: 1,
           pointerEvents: "auto",
         }}
         horizontal="center"
