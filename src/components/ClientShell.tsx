@@ -14,7 +14,6 @@ function useIsMobile(breakpointPx = 768) {
     const update = () => setIsMobile(mq.matches);
 
     update();
-    // Safari compat
     if (mq.addEventListener) mq.addEventListener("change", update);
     else mq.addListener(update);
 
@@ -32,23 +31,22 @@ export default function ClientShell({ children }: { children: React.ReactNode })
 
   return (
     <Column
-      background="page"
       fillWidth
       style={{
         minHeight: "100vh",
         position: "relative",
         overflowX: "hidden",
         isolation: "isolate",
+
+        // ✅ IMPORTANT: let layout's body::before gradient show through
+        background: "transparent",
       }}
       margin="0"
       padding="0"
       horizontal="center"
       suppressHydrationWarning
     >
-      {/* Background layer
-          - Desktop: Once UI Background (nice)
-          - Mobile: OFF because it breaks taps in iOS
-      */}
+      {/* Background layer (desktop only) */}
       {!isMobile && (
         <div
           aria-hidden="true"
@@ -98,7 +96,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         </div>
       )}
 
-      {/* Content layer (always interactive) */}
+      {/* Content layer */}
       <Column
         fillWidth
         style={{

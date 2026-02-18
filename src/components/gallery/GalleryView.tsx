@@ -19,7 +19,6 @@ export default function GalleryView() {
   return (
     <>
       <style>{`
-        /* Create an isolated stacking context so our sticky pill can sit above page overlays */
         .gallery-wrapper {
           display: flex;
           width: 100%;
@@ -82,7 +81,6 @@ export default function GalleryView() {
         @media (max-width: 768px) {
           .gallery-wrapper { flex-direction: column; align-items: center; }
 
-          /* IMPORTANT: make it clickable even if a global overlay sits above */
           .gallery-filter {
             display: inline-flex;
             gap: 32px;
@@ -92,9 +90,10 @@ export default function GalleryView() {
             align-items: center;
 
             position: sticky;
-            top: 10px;
 
-            /* GO ABOVE EVERYTHING */
+            /* ✅ move below header to avoid invisible overlay blocking taps */
+            top: 72px;
+
             z-index: 99999;
             pointer-events: auto;
 
@@ -107,8 +106,6 @@ export default function GalleryView() {
             border: 1px solid rgba(255, 255, 255, 0.12);
 
             color: rgba(255, 255, 255, 0.95);
-
-            /* Sometimes iOS overlays create weird stacking; this helps */
             transform: translateZ(0);
           }
 
