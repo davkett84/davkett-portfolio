@@ -77,6 +77,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             --gradient-start: rgba(40, 80, 140, 0.32);
             --gradient-end: rgba(0, 0, 0, 0);
           }
+
+          /* ✅ Restore gradient background safely (won't block taps) */
+          body {
+            position: relative;
+            background: transparent;
+            overflow-x: hidden;
+          }
+
+          body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+
+            background: linear-gradient(
+              180deg,
+              var(--gradient-start) 0%,
+              var(--gradient-end) 55%
+            );
+          }
         `}</style>
       </head>
 
