@@ -112,7 +112,7 @@ const gallery: Gallery = {
   title: `Photo gallery – ${person.name}`,
   description: `A curated photo collection by ${person.name}`,
   images: [
-   // 🔹 PORTRAITS (01–17)
+  // 🔹 PORTRAITS (01–17)
 {
   src: "/images/gallery/Portrait 01.webp",
   alt: "Editorial solo portrait with strong gaze and natural light",
@@ -166,7 +166,7 @@ const gallery: Gallery = {
 {
   src: "/images/gallery/Portrait 11.webp",
   alt: "Large family portrait at golden hour surrounded by tropical light",
-  orientation: "vertical",
+  orientation: "horizontal",
 },
 {
   src: "/images/gallery/Portrait 12.webp",
@@ -179,23 +179,23 @@ const gallery: Gallery = {
   orientation: "vertical",
 },
 {
-  src: "/images/gallery/Portrait 14.webp",
-  alt: "Young girl solo portrait with curly hair and heart hands by the ocean",
-  orientation: "vertical",
-},
-{
   src: "/images/gallery/Portrait 15.webp",
   alt: "Father placing hibiscus flower on little girl's hair in garden",
   orientation: "horizontal",
 },
 {
-  src: "/images/gallery/Portrait 16.webp",
-  alt: "Elderly couple sitting on grass surrounded by palm trees at sunset",
-  orientation: "horizontal",
+  src: "/images/gallery/Portrait 14.webp",
+  alt: "Young girl solo portrait with curly hair and heart hands by the ocean",
+  orientation: "vertical",
 },
 {
   src: "/images/gallery/Portrait 17.webp",
   alt: "Maternity couple sitting on beach sand at golden hour",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 16.webp",
+  alt: "Elderly couple sitting on grass surrounded by palm trees at sunset",
   orientation: "horizontal",
 },
 
