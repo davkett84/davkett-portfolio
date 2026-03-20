@@ -2,10 +2,6 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-/**
- * HOME GALLERY
- * /public/images/home/Home00001.webp → Home00027.webp
- */
 const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
   const n = String(i + 1).padStart(5, "0");
   return {
@@ -49,12 +45,10 @@ export default function HomeGallery() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (!dialogRef.current?.open) return;
-
       if (e.key === "Escape") close();
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     };
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +98,6 @@ export default function HomeGallery() {
           text-align: left;
         }
 
-        /* Make every thumbnail the exact same size */
         .thumbFrame {
           width: 100%;
           aspect-ratio: 4 / 5;

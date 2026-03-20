@@ -69,9 +69,13 @@ export default function Home() {
             <Text
               size="s"
               onBackground="neutral-weak"
-              style={{ letterSpacing: "0.02em" }}
+              style={{
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                fontSize: "11px",
+              }}
             >
-              Visual Storytelling
+              Director · Photographer · Hawaii
             </Text>
           </RevealFx>
         </div>

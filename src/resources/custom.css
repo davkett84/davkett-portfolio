@@ -51,12 +51,16 @@
   --scheme-neutral-600-30: rgba(137,152,159,0.3);
   --scheme-neutral-600-50: rgba(137,152,159,0.5);
   /*
-}*/
 
+}*/
 @font-face {
   font-family: "Canela";
   src: url("/fonts/CanelaDeck-Medium-Trial.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+}
+
+[data-theme="dark"] body {
+  background-color: #000000 !important;
 }

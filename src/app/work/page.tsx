@@ -1,4 +1,4 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Heading, Meta, Schema, Text } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 
@@ -14,8 +14,8 @@ export async function generateMetadata() {
 
 export default function Work() {
   return (
-    <Column fillWidth horizontal="center" paddingTop="24">
-      <Column fillWidth maxWidth="m">
+    <Column fillWidth horizontal="center" paddingTop="25">
+      <Column fillWidth maxWidth="m" horizontal="center" gap="12" paddingBottom="64">
         <Schema
           as="webPage"
           baseURL={baseURL}
@@ -30,12 +30,43 @@ export default function Work() {
           }}
         />
 
-        <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-          {work.title}
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            fontSize: "11px",
+          }}
+        >
+          Selected Work
+        </Text>
+
+        <Heading
+          variant="display-strong-m"
+          align="center"
+          onBackground="neutral-strong"
+          style={{
+            fontFamily: "Canela, serif",
+            fontWeight: 500,
+            letterSpacing: "-0.02em",
+            lineHeight: "1.05",
+            fontSize: "clamp(40px, 4vw, 60px)",
+          }}
+        >
+          David Cardenas
         </Heading>
+
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          align="center"
+          style={{ maxWidth: "420px", lineHeight: "1.7" }}
+        >
+          Documentary, brands, motorsport & lifestyle — stories told through film and photography.
+        </Text>
       </Column>
 
-      {/* ✅ Projects needs full width, not trapped in maxWidth="m" */}
       <Column fillWidth>
         <Projects />
       </Column>

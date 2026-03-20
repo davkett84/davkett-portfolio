@@ -28,6 +28,11 @@ function useIsMobile(breakpointPx = 768) {
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile(768);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Column
@@ -37,8 +42,6 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         position: "relative",
         overflowX: "hidden",
         isolation: "isolate",
-
-        // ✅ IMPORTANT: let layout's body::before gradient show through
         background: "transparent",
       }}
       margin="0"
@@ -46,8 +49,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       horizontal="center"
       suppressHydrationWarning
     >
-      {/* Background layer (desktop only) */}
-      {!isMobile && (
+      {/* Background layer — solo después de montar para evitar hydration mismatch */}
+      {mounted && !isMobile && (
         <div
           aria-hidden="true"
           style={{

@@ -94,7 +94,6 @@ export default function RootLayout({
             inset: 0;
             z-index: -1;
             pointer-events: none;
-
             background: linear-gradient(
               180deg,
               var(--gradient-start) 0%,
