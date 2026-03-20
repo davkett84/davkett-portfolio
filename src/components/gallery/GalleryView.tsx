@@ -6,7 +6,7 @@ import { gallery } from "@/resources";
 
 type Category = "portraits" | "commercial";
 
-const PORTRAITS_COUNT = 5;
+const PORTRAITS_COUNT = 17;
 
 export default function GalleryView() {
   const [activeCategory, setActiveCategory] = useState<Category>("portraits");

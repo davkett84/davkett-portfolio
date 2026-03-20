@@ -112,32 +112,92 @@ const gallery: Gallery = {
   title: `Photo gallery – ${person.name}`,
   description: `A curated photo collection by ${person.name}`,
   images: [
-    // 🔹 PORTRAITS (01–05)
-    {
-      src: "/images/gallery/Portrait 01.jpg",
-      alt: "Editorial solo portrait with strong gaze and natural light",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/Portrait 02.jpg",
-      alt: "Family lifestyle photography walking together naturally",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/Portrait 03.jpg",
-      alt: "Intimate engagement portrait with emotional closeness",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/Portrait 04.jpg",
-      alt: "Lifestyle solo portrait with architectural environment",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/Portrait 05.jpg",
-      alt: "Editorial wedding portrait with calm and subtle mood",
-      orientation: "vertical",
-    },
+   // 🔹 PORTRAITS (01–17)
+{
+  src: "/images/gallery/Portrait 01.webp",
+  alt: "Editorial solo portrait with strong gaze and natural light",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 02.webp",
+  alt: "Family lifestyle photography walking together naturally",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 03.webp",
+  alt: "Intimate engagement portrait with emotional closeness",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 04.webp",
+  alt: "Lifestyle solo portrait with architectural environment",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 05.webp",
+  alt: "Editorial wedding portrait with calm and subtle mood",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 06.webp",
+  alt: "Multi-generational family walking under palm trees at golden hour",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 07.webp",
+  alt: "Beach proposal with roses at sunset in Hawaii",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 08.webp",
+  alt: "Solo female portrait seated on driftwood by the ocean",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 09.webp",
+  alt: "Family of four with shaka sign by the ocean at sunset",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 10.webp",
+  alt: "Mature couple embracing on the beach with tender moment",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 11.webp",
+  alt: "Large family portrait at golden hour surrounded by tropical light",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 12.webp",
+  alt: "Family of four in white outfits at tropical resort",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 13.webp",
+  alt: "Father and young son hugging on the beach in matching aloha outfits",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 14.webp",
+  alt: "Young girl solo portrait with curly hair and heart hands by the ocean",
+  orientation: "vertical",
+},
+{
+  src: "/images/gallery/Portrait 15.webp",
+  alt: "Father placing hibiscus flower on little girl's hair in garden",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 16.webp",
+  alt: "Elderly couple sitting on grass surrounded by palm trees at sunset",
+  orientation: "horizontal",
+},
+{
+  src: "/images/gallery/Portrait 17.webp",
+  alt: "Maternity couple sitting on beach sand at golden hour",
+  orientation: "horizontal",
+},
 
     // 🔹 COMMERCIAL (01–11)
     {
