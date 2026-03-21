@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 const homeGalleryImages = Array.from({ length: 27 }, (_, i) => {
   const n = String(i + 1).padStart(5, "0");
@@ -105,14 +106,7 @@ export default function HomeGallery() {
           overflow: hidden;
           transition: box-shadow 200ms ease, transform 200ms ease;
           background: rgba(0,0,0,0.02);
-        }
-
-        .thumbFrame img {
-          width: 100%;
-          height: 100%;
-          display: block;
-          object-fit: cover;
-          transition: transform 200ms ease, filter 200ms ease;
+          position: relative;
         }
 
         .thumbBtn:hover .thumbFrame {
@@ -191,11 +185,16 @@ export default function HomeGallery() {
                 aria-label={`Open ${image.alt}`}
               >
                 <div className="thumbFrame">
-                  <img
+                  <Image
                     src={image.src}
                     alt={image.alt}
-                    loading={index < 6 ? "eager" : "lazy"}
-                    decoding="async"
+                    fill
+                    sizes="(max-width: 560px) 50vw, (max-width: 980px) 50vw, 33vw"
+                    priority={index < 3}
+                    style={{
+                      objectFit: "cover",
+                      transition: "transform 200ms ease, filter 200ms ease",
+                    }}
                   />
                 </div>
               </button>
@@ -212,33 +211,12 @@ export default function HomeGallery() {
           onClose={() => setActiveIndex(null)}
         >
           <div className="lightboxInner">
-            <button
-              className="lbBtn lbClose"
-              type="button"
-              onClick={close}
-              aria-label="Close"
-            >
-              ✕
-            </button>
+            <button className="lbBtn lbClose" type="button" onClick={close} aria-label="Close">✕</button>
 
             {activeIndex !== null ? (
               <>
-                <button
-                  className="lbBtn lbPrev"
-                  type="button"
-                  onClick={prev}
-                  aria-label="Previous"
-                >
-                  ‹
-                </button>
-                <button
-                  className="lbBtn lbNext"
-                  type="button"
-                  onClick={next}
-                  aria-label="Next"
-                >
-                  ›
-                </button>
+                <button className="lbBtn lbPrev" type="button" onClick={prev} aria-label="Previous">‹</button>
+                <button className="lbBtn lbNext" type="button" onClick={next} aria-label="Next">›</button>
               </>
             ) : null}
 
