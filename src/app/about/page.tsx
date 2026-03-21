@@ -79,7 +79,7 @@ export default function About() {
           style={{ maxWidth: 520, textAlign: "center", lineHeight: "1.7" }}
         >
           Director, photographer and filmmaker based in Hawaii.
-          Originally from Ecuador — now telling stories from the Pacific.
+          Originally from Ecuador — available worldwide.
         </Text>
 
         {social
@@ -110,33 +110,31 @@ export default function About() {
       </Column>
 
       {/* BIO */}
-      <Column fillWidth gap="24" paddingTop="xl" paddingBottom="xl" style={{ maxWidth: 640, margin: "0 auto" }}>
-
+      <Column
+        fillWidth
+        gap="24"
+        paddingTop="xl"
+        paddingBottom="xl"
+        style={{ maxWidth: 640, margin: "0 auto" }}
+      >
         <Text variant="body-default-l" onBackground="neutral-strong" style={{ lineHeight: "1.8" }}>
-          I studied Commercial Engineering in Ecuador and spent several years working
-          in digital marketing — building campaigns, leading content strategy, and
-          learning how brands communicate. But photography was always the thing I came
-          back to.
+          I'm a photographer and filmmaker with a background in digital marketing
+          and brand strategy. Over the last few years I've transitioned fully into
+          visual media — shooting weddings, portraits, brand campaigns, documentary
+          projects, and performance sports across Hawaii and internationally.
         </Text>
 
         <Text variant="body-default-l" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
-          Over the last few years I've made that the center of my work. I've shot
-          weddings, portraits, brand campaigns, motorsport events, and documentary
-          projects — always looking for the frame that holds something real.
-        </Text>
-
-        <Text variant="body-default-l" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
-          Now I'm moving deeper into film. I have a Sony FX3 and professional
-          lighting and audio gear, and I'm focused on producing short documentaries
-          and brand films for companies that have a story worth telling. Hawaii gives
-          me an extraordinary backdrop — but I work worldwide.
+          My work sits at the intersection of storytelling and craft. Whether I'm
+          covering an endurance race, documenting a brand, or capturing athletes
+          in motion — I look for the frame that holds something real.
         </Text>
       </Column>
 
       {/* CAPABILITIES */}
       <Column
         fillWidth
-        gap="16"
+        gap="0"
         paddingTop="xl"
         paddingBottom="xl"
         style={{
@@ -152,23 +150,35 @@ export default function About() {
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             fontSize: "11px",
-            marginBottom: 8,
+            marginBottom: 24,
           }}
         >
           What I do
         </Text>
 
         {[
-          { title: "Documentary & Brand Film", desc: "Short-form documentary, brand stories, and commercial video production." },
-          { title: "Weddings & Portraits", desc: "Natural light, cinematic approach. Available across Hawaii and destination." },
-          { title: "Motorsport & Sports", desc: "High-speed, high-stakes. Coverage of endurance races and automotive events." },
-          { title: "Commercial Photography", desc: "Product, lifestyle, and brand campaigns for companies and entrepreneurs." },
+          {
+            title: "Documentary & Brand Film",
+            desc: "Short-form documentary, brand stories, and commercial video production for companies with something real to say.",
+          },
+          {
+            title: "Performance & Sports",
+            desc: "Athletes in motion, endurance races, and high-stakes sporting events. Fast, precise, and cinematic.",
+          },
+          {
+            title: "Weddings & Portraits",
+            desc: "Natural light, cinematic approach. Available across Hawaii and for destination projects worldwide.",
+          },
+          {
+            title: "Commercial Photography",
+            desc: "Product, lifestyle, and brand campaigns for companies and entrepreneurs.",
+          },
         ].map((item) => (
           <Row
             key={item.title}
             fillWidth
             gap="16"
-            paddingY="16"
+            paddingY="20"
             style={{ borderBottom: "1px solid var(--neutral-alpha-weak)" }}
           >
             <Column gap="4" flex={1}>
@@ -208,8 +218,8 @@ export default function About() {
           Equipment
         </Text>
         <Text variant="body-default-m" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
-          Sony FX3 · Sony Alpha series · Professional lighting & audio ·
-          Adobe Premiere Pro · Lightroom · Capture One
+          Sony FX3 (video) · Sony A7 III (photo) · Adobe Lightroom ·
+          Adobe Photoshop · DaVinci Resolve
         </Text>
       </Column>
 
@@ -222,11 +232,14 @@ export default function About() {
         paddingBottom="80"
         style={{ textAlign: "center" }}
       >
-        <Heading variant="display-strong-s" style={{ fontFamily: "Canela, serif", fontWeight: 500 }}>
+        <Heading
+          variant="display-strong-s"
+          style={{ fontFamily: "Canela, serif", fontWeight: 500 }}
+        >
           Let's make something together.
         </Heading>
         <Text variant="body-default-m" onBackground="neutral-weak">
-          Available for projects in Hawaii and worldwide.
+          Based in Hawaii · Available worldwide.
         </Text>
         {social
           .filter((item) => item.name.toLowerCase() === "email")
