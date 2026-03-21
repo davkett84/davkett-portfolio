@@ -27,6 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          rel="preload"
+          href="/fonts/CanelaDeck-Medium-Trial.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{

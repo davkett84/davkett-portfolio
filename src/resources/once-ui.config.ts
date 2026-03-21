@@ -179,16 +179,16 @@ const mailchimp: MailchimpConfig = {
 
 const schema: SchemaConfig = {
   logo: "",
-  type: "Organization",
-  name: "Once UI",
-  description: home.description,
-  email: "lorant@once-ui.com",
+  type: "Person",
+  name: "David Cardenas",
+  description: "Director, photographer and filmmaker based in Hawaii. Available worldwide.",
+  email: "info@davkett.com",
 };
 
 const sameAs: SameAsConfig = {
-  threads: "https://www.threads.com/@once_ui",
-  linkedin: "https://www.linkedin.com/company/once-ui/",
-  discord: "https://discord.com/invite/5EyAQ4eNdS",
+  threads: "https://www.threads.com/@davkett",
+  linkedin: "",
+  discord: "",
 };
 
 const socialSharing: SocialSharingConfig = {
