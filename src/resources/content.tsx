@@ -54,8 +54,8 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}`,
-  description: "Photographer · Filmmaker based in Hawaii. Available worldwide.",
+  title: `David Cardenas — Director & Photographer, Hawaii`,
+  description: "Documentary, brand, and lifestyle photography & film. Based in Hawaii, available worldwide.",
   headline: <>Stories told through light and stillness.</>,
   featured: {
     display: false,

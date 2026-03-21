@@ -23,7 +23,7 @@ export async function generateMetadata() {
 
 export default function About() {
   return (
-    <Column maxWidth="m">
+    <Column maxWidth="m" fillWidth paddingX="l">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -44,65 +44,206 @@ export default function About() {
         horizontal="center"
         vertical="center"
         gap="s"
-        paddingTop="l"
+        paddingTop="xl"
         paddingBottom="l"
       >
-        {/* NAME */}
-        <Heading
-          variant="display-strong-xl"
-          style={{ textAlign: "center" }}
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            fontSize: "11px",
+          }}
         >
-          {person.name}
+          About
+        </Text>
+
+        <Heading
+          variant="display-strong-m"
+          style={{
+            textAlign: "center",
+            fontFamily: "Canela, serif",
+            fontWeight: 500,
+            letterSpacing: "-0.02em",
+            lineHeight: "1.05",
+            fontSize: "clamp(36px, 4vw, 56px)",
+          }}
+        >
+          David Cardenas
         </Heading>
 
-        {/* STATEMENT */}
         <Text
           variant="body-default-l"
           onBackground="neutral-weak"
-          style={{ maxWidth: 560, textAlign: "center" }}
+          style={{ maxWidth: 520, textAlign: "center", lineHeight: "1.7" }}
         >
-          Photographer and filmmaker based in Hawai‘i, creating visual work across
-          sports, performance-driven projects, and creative brands.
+          Director, photographer and filmmaker based in Hawaii.
+          Originally from Ecuador — now telling stories from the Pacific.
         </Text>
 
-        {/* EMAIL CTA (ICON + TEXT, CENTERED, BEFORE IMAGE) */}
         {social
           .filter((item) => item.name.toLowerCase() === "email")
-          .map(
-            (item) =>
-              item.link && (
-                <Button
-                  key={item.name}
-                  href={item.link}
-                  prefixIcon={item.icon}
-                  label="Email"
-                  size="m"
-                  variant="secondary"
-                  style={{
-                    marginTop: 16,
-                    marginBottom: 24,
-                    paddingInline: 18,
-                    paddingBlock: 10,
-                  }}
-                />
-              ),
+          .map((item) =>
+            item.link ? (
+              <Button
+                key={item.name}
+                href={item.link}
+                prefixIcon={item.icon}
+                label="Get in touch"
+                size="m"
+                variant="secondary"
+                style={{ marginTop: 16, marginBottom: 32 }}
+              />
+            ) : null
           )}
 
-        {/* HERO IMAGE */}
-        <Row
-          fillWidth
-          horizontal="center"
-          style={{ maxWidth: 880 }}
-        >
+        <Row fillWidth horizontal="center" style={{ maxWidth: 880 }}>
           <Media
             src="/images/about/about-hero.jpg"
-            alt="David Cárdenas"
+            alt="David Cardenas"
             radius="l"
             aspectRatio="16 / 9"
             sizes="(max-width: 768px) 92vw, 880px"
           />
         </Row>
       </Column>
+
+      {/* BIO */}
+      <Column fillWidth gap="24" paddingTop="xl" paddingBottom="xl" style={{ maxWidth: 640, margin: "0 auto" }}>
+
+        <Text variant="body-default-l" onBackground="neutral-strong" style={{ lineHeight: "1.8" }}>
+          I studied Commercial Engineering in Ecuador and spent several years working
+          in digital marketing — building campaigns, leading content strategy, and
+          learning how brands communicate. But photography was always the thing I came
+          back to.
+        </Text>
+
+        <Text variant="body-default-l" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
+          Over the last few years I've made that the center of my work. I've shot
+          weddings, portraits, brand campaigns, motorsport events, and documentary
+          projects — always looking for the frame that holds something real.
+        </Text>
+
+        <Text variant="body-default-l" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
+          Now I'm moving deeper into film. I have a Sony FX3 and professional
+          lighting and audio gear, and I'm focused on producing short documentaries
+          and brand films for companies that have a story worth telling. Hawaii gives
+          me an extraordinary backdrop — but I work worldwide.
+        </Text>
+      </Column>
+
+      {/* CAPABILITIES */}
+      <Column
+        fillWidth
+        gap="16"
+        paddingTop="xl"
+        paddingBottom="xl"
+        style={{
+          borderTop: "1px solid var(--neutral-alpha-weak)",
+          maxWidth: 640,
+          margin: "0 auto",
+        }}
+      >
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            fontSize: "11px",
+            marginBottom: 8,
+          }}
+        >
+          What I do
+        </Text>
+
+        {[
+          { title: "Documentary & Brand Film", desc: "Short-form documentary, brand stories, and commercial video production." },
+          { title: "Weddings & Portraits", desc: "Natural light, cinematic approach. Available across Hawaii and destination." },
+          { title: "Motorsport & Sports", desc: "High-speed, high-stakes. Coverage of endurance races and automotive events." },
+          { title: "Commercial Photography", desc: "Product, lifestyle, and brand campaigns for companies and entrepreneurs." },
+        ].map((item) => (
+          <Row
+            key={item.title}
+            fillWidth
+            gap="16"
+            paddingY="16"
+            style={{ borderBottom: "1px solid var(--neutral-alpha-weak)" }}
+          >
+            <Column gap="4" flex={1}>
+              <Text variant="body-strong-m" onBackground="neutral-strong">
+                {item.title}
+              </Text>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                {item.desc}
+              </Text>
+            </Column>
+          </Row>
+        ))}
+      </Column>
+
+      {/* GEAR */}
+      <Column
+        fillWidth
+        gap="16"
+        paddingTop="xl"
+        paddingBottom="xl"
+        style={{
+          borderTop: "1px solid var(--neutral-alpha-weak)",
+          maxWidth: 640,
+          margin: "0 auto",
+        }}
+      >
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            fontSize: "11px",
+            marginBottom: 8,
+          }}
+        >
+          Equipment
+        </Text>
+        <Text variant="body-default-m" onBackground="neutral-weak" style={{ lineHeight: "1.8" }}>
+          Sony FX3 · Sony Alpha series · Professional lighting & audio ·
+          Adobe Premiere Pro · Lightroom · Capture One
+        </Text>
+      </Column>
+
+      {/* CTA FINAL */}
+      <Column
+        fillWidth
+        horizontal="center"
+        gap="16"
+        paddingTop="xl"
+        paddingBottom="80"
+        style={{ textAlign: "center" }}
+      >
+        <Heading variant="display-strong-s" style={{ fontFamily: "Canela, serif", fontWeight: 500 }}>
+          Let's make something together.
+        </Heading>
+        <Text variant="body-default-m" onBackground="neutral-weak">
+          Available for projects in Hawaii and worldwide.
+        </Text>
+        {social
+          .filter((item) => item.name.toLowerCase() === "email")
+          .map((item) =>
+            item.link ? (
+              <Button
+                key={item.name}
+                href={item.link}
+                prefixIcon={item.icon}
+                label="info@davkett.com"
+                size="l"
+                variant="primary"
+                style={{ marginTop: 8 }}
+              />
+            ) : null
+          )}
+      </Column>
     </Column>
-  ); 
+  );
 }
