@@ -17,52 +17,26 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
   }
 
   const sorted = allProjects.sort((a, b) => {
-  const aIsVideo = a.metadata.previewType === "video" ? 1 : 0;
-  const bIsVideo = b.metadata.previewType === "video" ? 1 : 0;
-
-  // Primero ordenar por video (videos arriba)
-  if (bIsVideo !== aIsVideo) {
-    return bIsVideo - aIsVideo;
-  }
-
-  // Luego ordenar por fecha (más reciente primero)
-  return (
-    new Date(b.metadata.publishedAt).getTime() -
-    new Date(a.metadata.publishedAt).getTime()
-  );
-});
-
+    const aIsVideo = a.metadata.previewType === "video" ? 1 : 0;
+    const bIsVideo = b.metadata.previewType === "video" ? 1 : 0;
+    if (bIsVideo !== aIsVideo) return bIsVideo - aIsVideo;
+    return (
+      new Date(b.metadata.publishedAt).getTime() -
+      new Date(a.metadata.publishedAt).getTime()
+    );
+  });
 
   const displayed = range
     ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
     : sorted;
 
-  // COMPACT (related projects)
+  // COMPACT
   if (compact) {
     return (
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 960,
-          margin: "32px auto 72px",
-          padding: "0 24px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: 24,
-            overflowX: "auto",
-            justifyContent: "center",
-            paddingBottom: 8,
-            scrollbarWidth: "none",
-          }}
-        >
+      <div style={{ width: "100%", maxWidth: 960, margin: "32px auto 72px", padding: "0 24px" }}>
+        <div style={{ display: "flex", gap: 24, overflowX: "auto", justifyContent: "center", paddingBottom: 8, scrollbarWidth: "none" }}>
           {displayed.map((post) => (
-            <div
-              key={post.slug}
-              style={{ minWidth: 260, maxWidth: 260, flexShrink: 0 }}
-            >
+            <div key={post.slug} style={{ minWidth: 260, maxWidth: 260, flexShrink: 0 }}>
               <ProjectCard
                 compact
                 priority={false}
@@ -81,7 +55,7 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
     );
   }
 
-  // NORMAL — Danny-style tiles
+  // NORMAL
   return (
     <div style={{ width: "100%" }}>
       <style>{`
@@ -112,6 +86,11 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           color: inherit;
         }
 
+        .workLink.coming-soon {
+          cursor: default;
+          pointer-events: none;
+        }
+
         .workTile {
           position: relative;
           width: 100%;
@@ -121,6 +100,15 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           background: rgba(0,0,0,0.06);
           box-shadow: 0 10px 30px rgba(0,0,0,0.08);
           transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+
+        .workTile.coming-soon-tile {
+          pointer-events: none;
+        }
+
+        .workTile.coming-soon-tile .workMedia img,
+        .workTile.coming-soon-tile .workMedia video {
+          filter: grayscale(0.4) brightness(0.7);
         }
 
         .workMedia {
@@ -141,13 +129,13 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           filter: none;
         }
 
-        .workLink:hover .workTile {
+        .workLink:not(.coming-soon):hover .workTile {
           transform: scale(1.01);
           box-shadow: 0 14px 42px rgba(0,0,0,0.14);
         }
 
-        .workLink:hover .workMedia img,
-        .workLink:hover .workMedia video {
+        .workLink:not(.coming-soon):hover .workMedia img,
+        .workLink:not(.coming-soon):hover .workMedia video {
           transform: scale(1.03);
           filter: grayscale(1) contrast(1.05) brightness(0.72);
         }
@@ -166,7 +154,7 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           background: rgba(0,0,0,0.12);
         }
 
-        .workLink:hover .workOverlay {
+        .workLink:not(.coming-soon):hover .workOverlay {
           opacity: 1;
         }
 
@@ -187,12 +175,38 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
           letter-spacing: 0.10em;
           text-transform: uppercase;
         }
+
+        /* Badge In Production */
+        .comingSoonBadge {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,0.15);
+          color: rgba(255,255,255,0.85);
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          padding: 5px 10px;
+          border-radius: 999px;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        /* Overlay siempre visible para coming soon */
+        .workTile.coming-soon-tile .workOverlay {
+          opacity: 1;
+          background: rgba(0,0,0,0.18);
+        }
       `}</style>
 
       <div className="workGridWrap">
         <div className="workGrid">
           {displayed.map((post) => {
             const md: any = post.metadata;
+            const isComingSoon = md.comingSoon === true;
 
             const subtitle =
               typeof md.subtitle === "string" && md.subtitle ? md.subtitle : "";
@@ -223,13 +237,23 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
             const useVideoPreview =
               previewType === "video" && previewVideoLow && previewVideoHigh;
 
+            const TileWrapper = isComingSoon
+              ? ({ children }: { children: React.ReactNode }) => (
+                  <div className="workLink coming-soon">{children}</div>
+                )
+              : ({ children }: { children: React.ReactNode }) => (
+                  <Link href={`/work/${post.slug}`} className="workLink">
+                    {children}
+                  </Link>
+                );
+
             return (
-              <Link
-                key={post.slug}
-                href={`/work/${post.slug}`}
-                className="workLink"
-              >
-                <div className="workTile">
+              <TileWrapper key={post.slug}>
+                <div className={`workTile${isComingSoon ? " coming-soon-tile" : ""}`}>
+                  {isComingSoon && (
+                    <div className="comingSoonBadge">In Production</div>
+                  )}
+
                   <div className="workMedia">
                     {useVideoPreview ? (
                       <VideoPreview
@@ -260,7 +284,7 @@ export function Projects({ range, exclude, compact = false }: ProjectsProps) {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </TileWrapper>
             );
           })}
         </div>
