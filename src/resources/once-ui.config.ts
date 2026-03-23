@@ -13,7 +13,7 @@ import {
 } from "@/types";
 import { home } from "./index";
 
-const baseURL: string = "https://davkett-portfolio.vercel.app";
+const baseURL: string = "https://davkett.com";
 
 const routes: RoutesConfig = {
   "/": true,
