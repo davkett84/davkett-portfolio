@@ -189,8 +189,9 @@ export default function HomeGallery() {
                     src={image.src}
                     alt={image.alt}
                     fill
-                    sizes="(max-width: 560px) 50vw, (max-width: 980px) 50vw, 33vw"
+                    sizes="(max-width: 380px) 100vw, (max-width: 560px) 50vw, (max-width: 980px) 50vw, 33vw"
                     priority={index < 3}
+                    quality={index < 3 ? 85 : 75}
                     style={{
                       objectFit: "cover",
                       transition: "transform 200ms ease, filter 200ms ease",
