@@ -1,70 +1,64 @@
 import { Column, Heading, Text } from "@once-ui-system/core";
 import type { Metadata } from "next";
 
-// Oculta de motores de búsqueda — solo accesible por link directo
 export const metadata: Metadata = {
   title: "Video Work – David Cardenas",
   description: "Short-form video editing, cinematic reels and social content by David Cardenas.",
   robots: { index: false, follow: false },
 };
 
-// ─── AGREGA TUS VIDEOS AQUÍ ───────────────────────────────────────────────────
-// Para YouTube: abre el video → Share → Embed → copia solo el ID (lo que viene
-// después de "youtube.com/embed/"). Ejemplo: "dQw4w9WgXcQ"
-// Para Vimeo: abre el video → Share → Embed → copia el ID numérico.
-// Ejemplo: "123456789"
-const videos: {
-  id: string;
-  platform: "youtube" | "vimeo";
-  title: string;
-  category: string;
-}[] = [
-  // ── REEMPLAZA ESTOS EJEMPLOS CON TUS VIDEOS REALES ──
+// Videos cortos — 9:16 vertical, grid de 3 columnas en desktop
+const shortVideos: { id: string; title: string; category: string }[] = [
   {
-    id: "YOUTUBE_VIDEO_ID_1",
-    platform: "youtube",
-    title: "Personal Brand Reel",
-    category: "Short-form · Personal Brand",
+    id: "d5VcEEJslQE",
+    title: "Luxury Apartment Tour",
+    category: "Short · Real Estate",
   },
   {
-    id: "YOUTUBE_VIDEO_ID_2",
-    platform: "youtube",
-    title: "Cinematic Edit",
-    category: "Short-form · Lifestyle",
+    id: "RXZGRY8uvLw",
+    title: "Personal Brand Edit",
+    category: "Short · Personal Brand",
   },
   {
-    id: "YOUTUBE_VIDEO_ID_3",
-    platform: "youtube",
-    title: "Brand Content",
-    category: "Short-form · Commercial",
+    id: "1oNwpz5QvUo",
+    title: "Personal Brand Edit",
+    category: "Short · Personal Brand",
   },
+  {
+    id: "-SiWSdOwA30",
+    title: "Personal Brand Edit",
+    category: "Short · Personal Brand",
+  },
+  {
+    id: "dwdhPhboNQ0",
+    title: "Yoga Session",
+    category: "Short · Personal Brand",
+  },
+  // Agrega aquí los 2 videos de yoga pendientes cuando estén listos:
+  // { id: "YOUTUBE_ID", title: "Yoga Session", category: "Short · Personal Brand" },
+  // { id: "YOUTUBE_ID", title: "Yoga Session", category: "Short · Personal Brand" },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
-function getEmbedUrl(id: string, platform: "youtube" | "vimeo") {
-  if (platform === "youtube") {
-    return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
-  }
-  return `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0`;
-}
+// Documental largo — 16:9 horizontal
+const documentary = {
+  id: "ei_KUxeyxTg",
+  title: "Equannabis — Roots of a New Industry",
+  category: "Documentary · Brand Film",
+};
 
 export default function Reel() {
   return (
     <Column fillWidth horizontal="center" paddingTop="24" paddingBottom="80">
+
       {/* HEADER */}
       <Column fillWidth maxWidth="m" horizontal="center" gap="12" paddingBottom="64">
         <Text
           size="s"
           onBackground="neutral-weak"
-          style={{
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            fontSize: "11px",
-          }}
+          style={{ letterSpacing: "0.18em", textTransform: "uppercase", fontSize: "11px" }}
         >
           Video Work
         </Text>
-
         <Heading
           variant="display-strong-m"
           align="center"
@@ -79,81 +73,132 @@ export default function Reel() {
         >
           David Cardenas
         </Heading>
-
         <Text
           size="s"
           onBackground="neutral-weak"
           align="center"
           style={{ maxWidth: "420px", lineHeight: "1.7" }}
         >
-          Short-form video editing, cinematic reels and social content — crafted for brands and personal storytelling.
+          Short-form content, personal brand edits and documentary film —
+          crafted for creators, coaches and brands.
         </Text>
       </Column>
 
-      {/* VIDEO GRID */}
-      <Column fillWidth maxWidth="l" gap="48" paddingX="24">
-        {videos.map((video) => (
-          <Column key={video.id} fillWidth gap="16">
-            {/* EMBED */}
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                paddingBottom: "56.25%", // 16:9
-                borderRadius: "14px",
-                overflow: "hidden",
-                background: "rgba(0,0,0,0.06)",
-              }}
-            >
-              <iframe
-                src={getEmbedUrl(video.id, video.platform)}
-                title={video.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: 0,
-                }}
-              />
-            </div>
+      {/* SHORT-FORM GRID — 3 columnas desktop, 2 mobile */}
+      <Column fillWidth maxWidth="l" paddingX="24" gap="48">
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{ letterSpacing: "0.18em", textTransform: "uppercase", fontSize: "11px" }}
+        >
+          Short-form
+        </Text>
 
-            {/* LABEL */}
-            <Column gap="4">
-              <Text
-                size="s"
-                onBackground="neutral-weak"
+        <div
+          className="reel-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "20px",
+          }}
+        >
+          <style>{`
+            @media (max-width: 768px) {
+              .reel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            }
+            @media (max-width: 480px) {
+              .reel-grid { grid-template-columns: 1fr !important; }
+            }
+          `}</style>
+
+          {shortVideos.map((v) => (
+            <div key={v.id} className="reel-grid-item" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {/* 9:16 aspect ratio */}
+              <div
                 style={{
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  fontSize: "10px",
+                  position: "relative",
+                  width: "100%",
+                  paddingBottom: "177.78%",
+                  borderRadius: "14px",
+                  overflow: "hidden",
+                  background: "rgba(0,0,0,0.06)",
                 }}
               >
-                {video.category}
-              </Text>
-              <Heading
-                as="h2"
-                variant="heading-strong-s"
-                onBackground="neutral-strong"
-              >
-                {video.title}
-              </Heading>
-            </Column>
-          </Column>
-        ))}
+                <iframe
+                  src={`https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1`}
+                  title={v.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0, left: 0,
+                    width: "100%", height: "100%",
+                    border: 0,
+                  }}
+                />
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.5 }}>
+                  {v.category}
+                </p>
+                <p style={{ margin: "4px 0 0", fontSize: "14px", fontWeight: 500 }}>
+                  {v.title}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </Column>
 
-      {/* CONTACT CTA */}
+      {/* DOCUMENTAL — 16:9 full width */}
+      <Column fillWidth maxWidth="l" paddingX="24" paddingTop="80" gap="24">
+        <Text
+          size="s"
+          onBackground="neutral-weak"
+          style={{ letterSpacing: "0.18em", textTransform: "uppercase", fontSize: "11px" }}
+        >
+          Documentary
+        </Text>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              paddingBottom: "56.25%",
+              borderRadius: "14px",
+              overflow: "hidden",
+              background: "rgba(0,0,0,0.06)",
+            }}
+          >
+            <iframe
+              src={`https://www.youtube.com/embed/${documentary.id}?rel=0&modestbranding=1`}
+              title={documentary.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{
+                position: "absolute",
+                top: 0, left: 0,
+                width: "100%", height: "100%",
+                border: 0,
+              }}
+            />
+          </div>
+          <div>
+            <p style={{ margin: 0, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.5 }}>
+              {documentary.category}
+            </p>
+            <p style={{ margin: "4px 0 0", fontSize: "18px", fontWeight: 500 }}>
+              {documentary.title}
+            </p>
+          </div>
+        </div>
+      </Column>
+
+      {/* CTA */}
       <Column
-        fillWidth
-        maxWidth="m"
-        horizontal="center"
-        gap="16"
-        paddingTop="80"
-        paddingX="24"
+        fillWidth maxWidth="m" horizontal="center" gap="16"
+        paddingTop="80" paddingX="24"
         style={{ textAlign: "center" }}
       >
         <Text size="s" onBackground="neutral-weak" style={{ lineHeight: "1.7" }}>
@@ -177,6 +222,7 @@ export default function Reel() {
           Get in touch
         </a>
       </Column>
+
     </Column>
   );
 }
