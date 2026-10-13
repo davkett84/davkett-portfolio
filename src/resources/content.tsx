@@ -101,14 +101,14 @@ const blog: Blog = {
 
 const work: Work = {
   path: "/work",
-  label: "Work",
+  label: "Projects",
   title: `Projects – ${person.name}`,
   description: `Selected work by ${person.name} — documentary, brand, motorsport and lifestyle.`,
 };
 
 const gallery: Gallery = {
   path: "/gallery",
-  label: "Gallery",
+  label: "Photos",
   title: `Photo gallery – ${person.name}`,
   description: `A curated photo collection by ${person.name} — portraits, weddings, commercial and lifestyle photography in Hawaii.`,
   images: [
