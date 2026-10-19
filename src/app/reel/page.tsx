@@ -1,4 +1,4 @@
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Button, Column, Heading, Text } from "@once-ui-system/core";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -34,8 +34,12 @@ const shortVideos: { id: string; title: string; category: string }[] = [
     title: "Yoga Session",
     category: "Short · Personal Brand",
   },
-  // Agrega aquí los 2 videos de yoga pendientes cuando estén listos:
-  // { id: "YOUTUBE_ID", title: "Yoga Session", category: "Short · Personal Brand" },
+  {
+    id: "ZNLYJGlo0yE",
+    title: "Yoga Habits Ranking",
+    category: "Short · Personal Brand",
+  },
+  // Agrega aquí el video de yoga pendiente cuando esté listo:
   // { id: "YOUTUBE_ID", title: "Yoga Session", category: "Short · Personal Brand" },
 ];
 
@@ -77,10 +81,10 @@ export default function Reel() {
           size="s"
           onBackground="neutral-weak"
           align="center"
-          style={{ maxWidth: "420px", lineHeight: "1.7" }}
+          style={{ maxWidth: "440px", lineHeight: "1.7" }}
         >
-          Short-form content, personal brand edits and documentary film —
-          crafted for creators, coaches and brands.
+          Video editor specializing in short-form content, personal brand storytelling,
+          and documentary film. Based in Hawaii — available remotely.
         </Text>
       </Column>
 
@@ -201,26 +205,17 @@ export default function Reel() {
         paddingTop="80" paddingX="24"
         style={{ textAlign: "center" }}
       >
-        <Text size="s" onBackground="neutral-weak" style={{ lineHeight: "1.7" }}>
-          Available for short-form video editing, social content production, and creative direction.
+        <Text size="s" onBackground="neutral-weak" style={{ lineHeight: "1.7", maxWidth: "400px" }}>
+          Open to full-time and freelance opportunities in video editing and content production.
         </Text>
-        <a
+        <Button
           href="mailto:info@davkett.com"
-          style={{
-            display: "inline-block",
-            marginTop: "8px",
-            padding: "12px 28px",
-            borderRadius: "999px",
-            border: "1px solid currentColor",
-            fontSize: "13px",
-            letterSpacing: "0.08em",
-            textDecoration: "none",
-            color: "inherit",
-            transition: "opacity 200ms ease",
-          }}
-        >
-          Get in touch
-        </a>
+          prefixIcon="email"
+          label="Get in touch"
+          size="l"
+          variant="primary"
+          style={{ marginTop: "8px" }}
+        />
       </Column>
 
     </Column>
