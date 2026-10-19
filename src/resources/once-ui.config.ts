@@ -182,7 +182,7 @@ const schema: SchemaConfig = {
   type: "Person",
   name: "David Cardenas",
   description: "Director, photographer and filmmaker based in Hawaii. Available worldwide.",
-  email: "info@davkett.com",
+  email: "davkett@icloud.com",
 };
 
 const sameAs: SameAsConfig = {

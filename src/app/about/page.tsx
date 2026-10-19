@@ -249,7 +249,7 @@ export default function About() {
                 key={item.name}
                 href={item.link}
                 prefixIcon={item.icon}
-                label="info@davkett.com"
+                label="davkett@icloud.com"
                 size="l"
                 variant="primary"
                 style={{ marginTop: 8 }}

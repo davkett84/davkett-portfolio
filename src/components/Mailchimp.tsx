@@ -88,7 +88,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         id="contact-button"
         value="Contact Me"
         size="l"
-        href="mailto:info@davkett.com"
+        href="mailto:davkett@icloud.com"
         variant="primary"
         arrowIcon
       >

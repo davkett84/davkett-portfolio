@@ -16,7 +16,7 @@ const person: Person = {
   name: "David Cardenas",
   role: "Director · Photographer · Filmmaker",
   avatar: "/images/avatar.jpg",
-  email: "info@davkett.com",
+  email: "davkett@icloud.com",
   location: "Pacific/Honolulu",
   languages: ["English", "Spanish"],
 };

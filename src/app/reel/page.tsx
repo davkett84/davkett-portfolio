@@ -209,7 +209,7 @@ export default function Reel() {
           Open to full-time and freelance opportunities in video editing and content production.
         </Text>
         <Button
-          href="mailto:info@davkett.com"
+          href="mailto:davkett@icloud.com"
           prefixIcon="email"
           label="Get in touch"
           size="l"
