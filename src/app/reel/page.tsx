@@ -39,8 +39,11 @@ const shortVideos: { id: string; title: string; category: string }[] = [
     title: "Yoga Habits Ranking",
     category: "Short · Personal Brand",
   },
-  // Agrega aquí el video de yoga pendiente cuando esté listo:
-  // { id: "YOUTUBE_ID", title: "Yoga Session", category: "Short · Personal Brand" },
+  {
+    id: "3Zmp1q5BBPk",
+    title: "3 Things That Happen When You Start Yoga",
+    category: "Short · Personal Brand",
+  },
 ];
 
 // Documental largo — 16:9 horizontal
